@@ -18,6 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 
 function ManagerSignUpStep(props: ManagerSignUpStepProps) {
+  //router
   const router = useRouter();
   const { toast } = useToast();
 
