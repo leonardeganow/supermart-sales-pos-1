@@ -26,3 +26,10 @@ type ManagerSignUpStepProps = {
   handleNext: (page: number) => void;
   companyId: string;
 };
+
+interface OnboardingRightProps {
+  heading: string;
+  subtext: string;
+  href: string;
+  buttontext: string;
+}

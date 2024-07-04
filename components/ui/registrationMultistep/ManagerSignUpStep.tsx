@@ -24,8 +24,8 @@ function ManagerSignUpStep(props: ManagerSignUpStepProps) {
 
   const formSchema = z
     .object({
-      name: z.string(),
-      email: z.string().email(),
+      name: z.string().min(1, { message: "company name is required" }),
+      email: z.string().email().min(1, { message: "email is required" }),
       phone: z.string().min(10).max(15),
       username: z.string(),
       password: z.string().min(8),
@@ -97,7 +97,7 @@ function ManagerSignUpStep(props: ManagerSignUpStepProps) {
               <FormItem>
                 <FormLabel>Full name</FormLabel>
                 <FormControl>
-                  <Input placeholder="bless supermarket" {...field} />
+                  <Input placeholder="enter username" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -110,7 +110,7 @@ function ManagerSignUpStep(props: ManagerSignUpStepProps) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="bless@gmail.com" {...field} />
+                  <Input placeholder="enter your email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -123,7 +123,7 @@ function ManagerSignUpStep(props: ManagerSignUpStepProps) {
               <FormItem>
                 <FormLabel>Telephone</FormLabel>
                 <FormControl>
-                  <Input placeholder="telephone number" {...field} />
+                  <Input placeholder="enter your telephone number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -136,7 +136,7 @@ function ManagerSignUpStep(props: ManagerSignUpStepProps) {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="username" {...field} />
+                  <Input placeholder="enter a username" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -150,7 +150,7 @@ function ManagerSignUpStep(props: ManagerSignUpStepProps) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="password" {...field} />
+                  <Input placeholder="enter your password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

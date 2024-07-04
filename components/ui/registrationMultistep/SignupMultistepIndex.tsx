@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import CompanySignupStep from "./CompanySignupStep";
 import ManagerSignUpStep from "./ManagerSignUpStep";
+import Logo from "@/components/Logo";
 
 function SignupMultistepIndex() {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -30,7 +31,8 @@ function SignupMultistepIndex() {
   };
 
   return (
-    <div className="w-[80%] md:w-[50%] lg:w-[30%] border p-5 rounded-lg">
+    <div className="w-[80%] md:w-[50%] lg:w-[30%] border p-5 rounded-lg flex flex-col gap-y-5 ">
+      <Logo />
       {renderForm()}
     </div>
   );

@@ -20,10 +20,10 @@ function CompanySignupStep(props: CompanySignupStepProps) {
   const { toast } = useToast();
 
   const formSchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
+    name: z.string().min(1, { message: "company name is required" }),
+    email: z.string().email().min(1, { message: "email is required" }),
     phone: z.string().min(10).max(15),
-    location: z.string(),
+    location: z.string().min(1, { message: "location is required" }),
   });
 
   const defaultValues: CompanySignup = {
@@ -76,7 +76,7 @@ function CompanySignupStep(props: CompanySignupStepProps) {
               <FormItem>
                 <FormLabel>Company name</FormLabel>
                 <FormControl>
-                  <Input placeholder="bless supermarket" {...field} />
+                  <Input placeholder="enter your company name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -89,7 +89,7 @@ function CompanySignupStep(props: CompanySignupStepProps) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="bless@gmail.com" {...field} />
+                  <Input placeholder="enter your email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -102,7 +102,7 @@ function CompanySignupStep(props: CompanySignupStepProps) {
               <FormItem>
                 <FormLabel>Telephone</FormLabel>
                 <FormControl>
-                  <Input placeholder="telephone number" {...field} />
+                  <Input placeholder="enter your telephone number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -115,7 +115,7 @@ function CompanySignupStep(props: CompanySignupStepProps) {
               <FormItem>
                 <FormLabel>Location</FormLabel>
                 <FormControl>
-                  <Input placeholder="location" {...field} />
+                  <Input placeholder="enter your location" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
