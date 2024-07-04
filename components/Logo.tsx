@@ -1,12 +1,23 @@
-import Image from 'next/image'
-import React from 'react'
-import logo from "../public/logo.png"
-function Logo() {
+import React from "react";
+import { LiaShoppingCartSolid } from "react-icons/lia";
+
+interface LogoProps {
+  isClosed?: boolean;
+  route?: string;
+}
+function Logo({ isClosed, route }: LogoProps) {
   return (
-    <div className='flex justify-center'>
-      <Image src={logo} alt="logo" width={200} className=' '/>
+    <div className="flex justify-center items-center gap-1">
+      {!isClosed && <LiaShoppingCartSolid size={40} className="" />}
+      <h1
+        className={`logo-font ${
+          route === "/dashboard" ? "text-xl" : ""
+        } text-3xl`}
+      >
+        QuickMart.
+      </h1>
     </div>
-  )
+  );
 }
 
-export default Logo
+export default Logo;

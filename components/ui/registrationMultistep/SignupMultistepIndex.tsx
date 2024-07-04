@@ -32,7 +32,7 @@ function SignupMultistepIndex() {
 
   return (
     <div className="w-[80%] md:w-[50%] lg:w-[30%] border p-5 rounded-lg flex flex-col gap-y-5 ">
-      <Logo />
+      <Logo route="/"/>
       {renderForm()}
     </div>
   );

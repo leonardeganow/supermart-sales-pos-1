@@ -90,7 +90,7 @@ function Sidebar() {
     >
       <div>
         <div className="h-[8dvh] border-b flex flex-col justify-center">
-          <Logo />
+          <Logo isClosed={isClosed} route="/dashboard"/>
         </div>
 
         <div className="pt-2 m-2">

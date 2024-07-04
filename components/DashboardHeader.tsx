@@ -40,7 +40,7 @@ async function DashboardHeader() {
 
       <div className="flex items-center gap-x-5">
         <LogoutButton />
-        <div className="flex flex-col">
+        <div className="sm:flex flex-col hidden">
           <p>{user.username}</p>
           <p className="text-sm text-muted-foreground">{user.role}</p>
         </div>
