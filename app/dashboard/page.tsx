@@ -2,7 +2,7 @@ import React from "react";
 import DashboardLayout from "./layout";
 
 async function Page() {
-  return <DashboardLayout>children</DashboardLayout>;
+  return <div>children</div>;
 }
 
 export default Page;
