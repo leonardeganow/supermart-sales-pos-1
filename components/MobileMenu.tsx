@@ -19,7 +19,7 @@ function MobileMenu() {
   };
   return (
     <div>
-      <Logo />
+      <Logo route="/dashboard"/>
       {renderNavItems()}
     </div>
   );
