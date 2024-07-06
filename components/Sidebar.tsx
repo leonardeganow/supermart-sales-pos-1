@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import {
   AiOutlineDashboard,
@@ -22,42 +22,44 @@ export const navItems = [
   },
   {
     label: "Products",
-    path: "/products",
+    path: "/dashboard/products",
     icon: <BsBoxes size={20} />,
   },
   {
     label: "Orders",
-    path: "/orders",
+    path: "/dashboard/orders",
     icon: <AiOutlineShoppingCart size={20} />,
   },
   {
     label: "Suppliers",
-    path: "/suppliers",
+    path: "/dashboard/suppliers",
     icon: <PiVan size={20} />,
   },
   {
     label: "Reports",
-    path: "/reports",
+    path: "/dashboard/reports",
     icon: <AiOutlineReconciliation size={20} />,
   },
   {
     label: "Users",
-    path: "/users",
+    path: "/dashboard/users",
     icon: <AiOutlineTeam size={20} />,
   },
   {
     label: "Settings",
-    path: "/settings",
+    path: "/dashboard/settings",
     icon: <AiOutlineSetting size={20} />,
   },
 ];
 function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isClosed, setIsClosed] = useState<boolean>(false);
 
   const renderNavItems = () => {
     return navItems.map((item) => (
       <div
+        onClick={() => router.push(item.path)}
         key={item.label}
         className={`hover:bg-red-100 hover:text-red-800 dark:hover:bg-white dark:hover:text-black   p-4 mb-2 rounded-lg cursor-pointer transition-all duration-100 ${
           item.path === pathname
@@ -90,7 +92,7 @@ function Sidebar() {
     >
       <div>
         <div className="h-[8dvh] border-b flex flex-col justify-center">
-          <Logo isClosed={isClosed} route="/dashboard"/>
+          <Logo isClosed={isClosed} route="/dashboard" />
         </div>
 
         <div className="pt-2 m-2">

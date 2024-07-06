@@ -1,20 +1,12 @@
 import React from "react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/app/libs/session";
-import getInitials from "@/app/helpers";
-import LogoutButton from "./LogoutButton";
 import { LiaHamburgerSolid } from "react-icons/lia";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import MobileMenu from "./MobileMenu";
 
+import DarkModeToggler from "./DarkModeToggler";
+import AvatarDropdown from "./AvatarDropdown";
 async function DashboardHeader() {
   const user: ManagerSignup = await getCurrentUser();
 
@@ -38,15 +30,17 @@ async function DashboardHeader() {
         </SheetContent>
       </Sheet>
 
+      <DarkModeToggler />
       <div className="flex items-center gap-x-5">
-        <LogoutButton />
+        {/* <LogoutButton /> */}
         <div className="sm:flex flex-col hidden">
-          <p>{user.username}</p>
-          <p className="text-sm text-muted-foreground">{user.role}</p>
+          <p className="capitalize">{user.name}</p>
+          <p className="text-sm text-muted-foreground capitalize">
+            {user.role}
+          </p>
         </div>
-        <Avatar>
-          <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-        </Avatar>
+
+        <AvatarDropdown user={user} />
       </div>
     </div>
   );

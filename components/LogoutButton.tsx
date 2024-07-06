@@ -9,7 +9,7 @@ function LogoutButton() {
       <TbLogout2
         onClick={() => signOut()}
         size={22}
-        className="hover:text-red-500 cursor-pointer"
+        className="hover:text-red-500 cursor-pointer hidden sm:block"
       />
     </div>
   );

@@ -38,7 +38,6 @@ export default function RootLayout({
           >
             {children}
             <Toaster />
-            {/* <DarkModeToggler /> */}
           </ThemeProvider>
         </SessionProvider>
       </body>

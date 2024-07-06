@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 function CompanySignupStep(props: CompanySignupStepProps) {
   const { toast } = useToast();
@@ -68,7 +69,7 @@ function CompanySignupStep(props: CompanySignupStepProps) {
   return (
     <div className=" ">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <FormField
             control={form.control}
             name="name"
@@ -121,18 +122,30 @@ function CompanySignupStep(props: CompanySignupStepProps) {
               </FormItem>
             )}
           />
-          <Button disabled={form.formState.isSubmitting} type="submit">
-            {form.formState.isSubmitting ? (
-              <div className="flex justify-center items-center">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait
-              </div>
-            ) : (
-              "submit"
-            )}
-          </Button>
+          <div  className="flex justify-center">
+            <Button
+              className="flex justify-center items-center"
+              disabled={form.formState.isSubmitting}
+              type="submit"
+            >
+              {form.formState.isSubmitting ? (
+                <div className="flex justify-center items-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </div>
+              ) : (
+                "submit"
+              )}
+            </Button>
+          </div>
         </form>
       </Form>
+      <div className="text-xs block sm:hidden text-center text-muted-foreground pt-3">
+        Already have an account?{" "}
+        <Link href={"/login"} className=" font-bold">
+          Sign in
+        </Link>{" "}
+      </div>
     </div>
   );
 }

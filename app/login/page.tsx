@@ -19,6 +19,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import Logo from "@/components/Logo";
 import OnboardingRight from "@/components/OnboardingRight";
+import Link from "next/link";
 
 const formSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),
@@ -81,9 +82,9 @@ function Page() {
   return (
     <div className="flex h-[100dvh] items-center justify-center gap-40">
       <div className="w-[80%] md:w-[50%] lg:w-[30%] border p-5 rounded-lg flex flex-col gap-y-5">
-        <Logo route="/login"/>
+        <Logo route="/login" />
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               name="username"
@@ -113,7 +114,6 @@ function Page() {
             <div className="flex justify-center">
               <Button
                 disabled={form.formState.isSubmitting}
-                className="flex justify-center"
                 type="submit"
               >
                 {form.formState.isSubmitting ? (
@@ -125,6 +125,12 @@ function Page() {
                   "Login"
                 )}
               </Button>
+            </div>
+            <div className="text-xs block sm:hidden text-center text-muted-foreground">
+              Dont have an account?{" "}
+              <Link href={"/"} className=" font-bold">
+                Sign up
+              </Link>{" "}
             </div>
           </form>
         </Form>

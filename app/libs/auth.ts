@@ -58,7 +58,7 @@ const authOptions: NextAuthOptions = {
           name,
           username,
           role,
-          supermarketId,
+          supermarketId: supermarketId.toString(),
         };
       },
     }),
@@ -86,7 +86,7 @@ const authOptions: NextAuthOptions = {
           token.name = dbUser.name;
           token.username = dbUser.username;
           token.role = dbUser.role;
-          token.supermarketId = dbUser.supermarketId;
+          token.supermarketId = dbUser.supermarketId.toString();
         }
       }
       return token;
