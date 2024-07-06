@@ -51,7 +51,7 @@ async function Page() {
       return (
         <div
           key={i}
-          className="shadow-md border flex flex-col gap-y-2 rounded-xl p-5"
+          className="shadow border flex flex-col gap-y-2 rounded-xl p-5"
         >
           <div className="flex justify-between">
             <h1 className="font-semibold capitalize text-sm">{widget.title}</h1>
@@ -115,7 +115,7 @@ async function Page() {
         <DashboardPieChart />
       </div>
       <div className="mt-6 border rounded-lg">
-      <h1 className="capitalize text-lg font-bold p-5">popular products</h1>
+        <h1 className="capitalize text-lg font-bold p-5">popular products</h1>
 
         <DashboardTable />
       </div>
