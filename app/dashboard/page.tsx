@@ -10,6 +10,7 @@ import {
 import { Currency } from "lucide-react";
 import { DashboardAreaChart } from "@/components/DashboardAreaChart";
 import { DashboardPieChart } from "@/components/Piechart";
+import { DashboardTable } from "@/components/DashboardTable";
 
 async function Page() {
   const dashWidgets = [
@@ -111,7 +112,12 @@ async function Page() {
           <DashboardAreaChart />
         </div>
 
-        <DashboardPieChart/>
+        <DashboardPieChart />
+      </div>
+      <div className="mt-6 border rounded-lg">
+      <h1 className="capitalize text-lg font-bold p-5">popular products</h1>
+
+        <DashboardTable />
       </div>
     </div>
   );

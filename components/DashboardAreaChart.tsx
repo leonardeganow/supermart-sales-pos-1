@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { TrendingUp } from "lucide-react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { TrendingUp } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
@@ -10,13 +10,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 const chartData = [
   { month: "January", sales: 186 },
   { month: "February", sales: 305 },
@@ -24,14 +24,14 @@ const chartData = [
   { month: "April", sales: 73 },
   { month: "May", sales: 209 },
   { month: "June", sales: 214 },
-]
+];
 
 const chartConfig = {
-    sales: {
+  sales: {
     label: "Desktop",
     color: "yellow",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function DashboardAreaChart() {
   return (
@@ -87,5 +87,5 @@ export function DashboardAreaChart() {
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }
