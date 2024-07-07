@@ -48,7 +48,7 @@ async function Page() {
           <p className="text-sm">View, edit, and delete user accounts</p>
         </div>
 
-        <div className="sm:flex-row sm:items-center gap-x-2 flex-col flex gap-y-4">
+        <div className="sm:flex-row sm:items-center gap-x-2  gap-y-4">
           <Dialog>
             <DialogTrigger>
               {" "}
@@ -57,9 +57,7 @@ async function Page() {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>User management</DialogTitle>
-                <DialogDescription>
-            form goes here
-                </DialogDescription>
+                <DialogDescription>form goes here</DialogDescription>
               </DialogHeader>
             </DialogContent>
           </Dialog>
