@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import CompanySignupStep from "./CompanySignupStep";
 import ManagerSignUpStep from "./ManagerSignUpStep";
-import Logo from "@/components/Logo";
+import Logo from "@/components/header/Logo";
 
 function SignupMultistepIndex() {
   const [currentStep, setCurrentStep] = useState<number>(1);

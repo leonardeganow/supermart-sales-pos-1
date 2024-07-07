@@ -1,5 +1,5 @@
-import SignupMultistepIndex from "@/components/ui/registrationMultistep/SignupMultistepIndex";
 import OnboardingRight from "@/components/OnboardingRight";
+import SignupMultistepIndex from "@/components/registrationMultistep/SignupMultistepIndex";
 export default function Home() {
   return (
     <div className="">

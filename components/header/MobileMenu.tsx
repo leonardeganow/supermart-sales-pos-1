@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { navItems } from "./Sidebar";
+import { navItems } from "../dashboard/Sidebar";
 import Logo from "./Logo";
 
 function MobileMenu() {

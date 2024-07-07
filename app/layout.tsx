@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-import DarkModeToggler from "@/components/DarkModeToggler";
+import DarkModeToggler from "@/components/dashboard/DarkModeToggler";
 import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 

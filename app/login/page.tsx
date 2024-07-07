@@ -17,7 +17,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
-import Logo from "@/components/Logo";
+import Logo from "@/components/header/Logo";
 import OnboardingRight from "@/components/OnboardingRight";
 import Link from "next/link";
 

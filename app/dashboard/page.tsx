@@ -1,5 +1,5 @@
 import React from "react";
-import { DatePickerWithRange } from "@/components/DateRangePicker";
+import { DatePickerWithRange } from "@/components/dashboard/DateRangePicker";
 import {
   Select,
   SelectContent,
@@ -8,9 +8,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Currency } from "lucide-react";
-import { DashboardAreaChart } from "@/components/DashboardAreaChart";
-import { DashboardPieChart } from "@/components/Piechart";
-import { DashboardTable } from "@/components/DashboardTable";
+import { DashboardAreaChart } from "@/components/dashboard/DashboardAreaChart";
+import { DashboardPieChart } from "@/components/dashboard/Piechart";
+import { DashboardTable } from "@/components/dashboard/DashboardTable";
 
 async function Page() {
   const dashWidgets = [

@@ -3,10 +3,10 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/app/libs/session";
 import { LiaHamburgerSolid } from "react-icons/lia";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import MobileMenu from "./MobileMenu";
+import MobileMenu from "../header/MobileMenu";
 
 import DarkModeToggler from "./DarkModeToggler";
-import AvatarDropdown from "./AvatarDropdown";
+import AvatarDropdown from "../header/AvatarDropdown";
 async function DashboardHeader() {
   const user: ManagerSignup = await getCurrentUser();
 
@@ -21,7 +21,7 @@ async function DashboardHeader() {
         <SheetTrigger>
           {" "}
           <LiaHamburgerSolid
-            size={20}
+            size={22}
             className="cursor-pointer hover:text-red-500 block sm:hidden"
           />
         </SheetTrigger>

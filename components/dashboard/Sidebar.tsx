@@ -12,7 +12,7 @@ import {
 } from "react-icons/ai";
 import { BsBoxes } from "react-icons/bs";
 import { PiVan } from "react-icons/pi";
-import Logo from "./Logo";
+import Logo from "../header/Logo";
 
 export const navItems = [
   {
