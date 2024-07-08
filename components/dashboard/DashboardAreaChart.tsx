@@ -28,8 +28,8 @@ const chartData = [
 
 const chartConfig = {
   sales: {
-    label: "Desktop",
-    color: "yellow",
+    label: "Sales",
+    color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
@@ -37,7 +37,7 @@ export function DashboardAreaChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sales Overview</CardTitle>
+        <CardTitle>Sales overview</CardTitle>
         <CardDescription>
           Showing total sales for the last 6 months
         </CardDescription>
@@ -67,9 +67,9 @@ export function DashboardAreaChart() {
             <Area
               dataKey="sales"
               type="natural"
-              fill="red"
+              fill="var(--color-sales)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke="var(--color-sales)"
             />
           </AreaChart>
         </ChartContainer>

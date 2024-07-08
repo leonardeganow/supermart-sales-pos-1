@@ -59,12 +59,12 @@ async function Page() {
           </div>
           <div>
             {widget.currency ? (
-              <h1 className="text-xl font-black">
+              <h1 className="text-xl font-bold">
                 {widget.currency === "Ghs" ? "₵" : ""}
                 {widget.value}
               </h1>
             ) : (
-              <h1 className="text-xl font-black">
+              <h1 className="text-xl font-bold">
                 {widget.valueIncrease ? "+" : ""}
                 {widget.value}
               </h1>

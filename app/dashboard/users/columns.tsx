@@ -24,20 +24,20 @@ export type Payment = {
 
 export const columns: ColumnDef<Payment>[] = [
   {
-    accessorKey: "fullname",
-    header: "Fullname",
+    accessorKey: "name",
+    header: "name",
   },
   {
     accessorKey: "username",
     header: "Username",
   },
   {
-    accessorKey: "password",
-    header: "Password",
+    accessorKey: "email",
+    header: "Email",
   },
   {
-    accessorKey: "type",
-    header: "type",
+    accessorKey: "role",
+    header: "role",
   },
   {
     accessorKey: "actions",
@@ -45,8 +45,6 @@ export const columns: ColumnDef<Payment>[] = [
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -57,11 +55,7 @@ export const columns: ColumnDef<Payment>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Edit
-            </DropdownMenuItem>
+            <DropdownMenuItem>Edit</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>

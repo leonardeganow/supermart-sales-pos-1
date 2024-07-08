@@ -12,8 +12,3 @@ export default function getInitials(name: string) {
   // Join the initials into a single string
   return initials.join("");
 }
-
-const name = "leonard adjei";
-const initials = getInitials(name);
-
-console.log(initials); // Outputs: LA

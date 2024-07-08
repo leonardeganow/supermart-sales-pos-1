@@ -14,7 +14,8 @@ export async function POST(request: any) {
       return NextResponse.json(
         {
           message: "supermarket already exists",
-          status: false,
+          status: true,
+          id: supermarket._id,
         },
         { status: 400 }
       );
@@ -33,7 +34,7 @@ export async function POST(request: any) {
       {
         message: "supermart created successfuly",
         status: true,
-        id: savedSupermart._id
+        id: savedSupermart._id,
       },
       { status: 200 }
     );

@@ -63,7 +63,7 @@ function Sidebar() {
         key={item.label}
         className={`hover:bg-red-100 hover:text-red-800 dark:hover:bg-white dark:hover:text-black   p-4 mb-2 rounded-lg cursor-pointer transition-all duration-100 ${
           item.path === pathname
-            ? "border-r-2 border-red-600 dark:border-white bg-red-100 text-red-800"
+            ? "border-r-2 border-red-600 dark:border-white bg-red-200 text-red-800"
             : ""
         }`}
       >

@@ -20,6 +20,7 @@ import { Loader2 } from "lucide-react";
 import Logo from "@/components/header/Logo";
 import OnboardingRight from "@/components/OnboardingRight";
 import Link from "next/link";
+import userStore from "../store/userStore";
 
 const formSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),
@@ -33,11 +34,14 @@ const defaultValues: z.infer<typeof formSchema> = {
 
 function Page() {
   const router = useRouter();
+  const { setUserId } = userStore();
+
   const { toast } = useToast();
   const { data: session } = useSession();
 
   useEffect(() => {
     if (session?.user) {
+      setUserId(session.user.id);
       router.push("/dashboard");
     }
   }, [session, router]);
@@ -112,10 +116,7 @@ function Page() {
               )}
             />
             <div className="flex justify-center">
-              <Button
-                disabled={form.formState.isSubmitting}
-                type="submit"
-              >
+              <Button disabled={form.formState.isSubmitting} type="submit">
                 {form.formState.isSubmitting ? (
                   <div className="flex justify-center items-center">
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

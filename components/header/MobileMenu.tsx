@@ -2,11 +2,15 @@
 import React from "react";
 import { navItems } from "../dashboard/Sidebar";
 import Logo from "./Logo";
+import { useRouter } from "next/navigation";
 
 function MobileMenu() {
+  const router = useRouter();
+
   const renderNavItems = () => {
     return navItems.map((item) => (
       <div
+        onClick={() => router.push(item.path)}
         key={item.label}
         className={`hover:bg-red-100 hover:text-red-800 dark:hover:bg-white dark:hover:text-black   p-4 mb-2 rounded-lg cursor-pointer transition-all duration-100 `}
       >
@@ -19,7 +23,7 @@ function MobileMenu() {
   };
   return (
     <div>
-      <Logo route="/dashboard"/>
+      <Logo route="/dashboard" />
       {renderNavItems()}
     </div>
   );
