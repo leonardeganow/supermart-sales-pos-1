@@ -43,3 +43,19 @@ interface CurrentUser {
   role: string;
   supermarketId: string;
 }
+
+interface UserFormProps {
+  refetch: () => void;
+  setShowModal: any;
+  type: string;
+  userData: any;
+}
+
+type Payment = {
+  id: string;
+  username: string;
+  fullname: string;
+  email: string;
+  password: string;
+  type: string;
+};

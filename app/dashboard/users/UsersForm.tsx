@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect } from "react";
-import { z } from "zod";
 import {
   Select,
   SelectContent,
@@ -8,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -21,45 +21,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
+import defaultValues from "./defaultValues";
+import formSchema from "./validationSchema";
 
-interface UserFormProps {
-  refetch: () => void;
-  setShowModal: any;
-  type: string;
-  userData: any;
-}
 function UsersForm(props: UserFormProps) {
   const [loader, setLoader] = React.useState(false);
   const { toast } = useToast();
-  const defaultValues: ManagerSignup = {
-    name: "",
-    phone: "",
-    email: "",
-    username: "",
-    password: "",
-    role: "",
-  };
-
-  const formSchema = z.object({
-    name: z.string().min(1, { message: "Name is required" }),
-    username: z.string().min(1, { message: "Username is required" }),
-    email: z
-      .string()
-      .email({ message: "Invalid email address" })
-      .min(1, { message: "Email is required" }),
-    phone: z
-      .string()
-      .min(10, { message: "Phone number should be at least 10 characters" })
-      .max(15, { message: "Phone number should not exceed 15 characters" }),
-    password: z
-      .string()
-      .min(8, { message: "Password should be at least 8 characters" }),
-
-    role: z.string().min(1, { message: "Role is required" }),
-  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

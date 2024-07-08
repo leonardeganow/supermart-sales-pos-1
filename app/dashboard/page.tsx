@@ -111,12 +111,10 @@ async function Page() {
         <div>
           <DashboardAreaChart />
         </div>
-
         <DashboardPieChart />
       </div>
       <div className="mt-6 border rounded-lg">
         <h1 className="capitalize text-lg font-bold p-5">popular products</h1>
-
         <DashboardTable />
       </div>
     </div>

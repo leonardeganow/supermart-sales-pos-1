@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { DataTable } from "./DataTable";
-// import { columns } from "./columns";
 import {
   Dialog,
   DialogContent,
@@ -25,19 +24,11 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-export type Payment = {
-  id: string;
-  username: string;
-  fullname: string;
-  email: string;
-  password: string;
-  type: string;
-};
-
 function Page() {
   const [type, setType] = React.useState("");
   const [userData, setUserData] = React.useState();
   const [showModal, setShowModal] = React.useState(false);
+
   const getUsers = async () => {
     try {
       const response = await axios.get("/api/getmanagedusers");
@@ -56,14 +47,14 @@ function Page() {
   });
 
   const columns: ColumnDef<Payment>[] = [
-    // {
-    //   accessorKey: "name",
-    //   header: "name",
-    // },
     {
-      accessorKey: "username",
-      header: "Username",
+      accessorKey: "name",
+      header: "name",
     },
+    // {
+    //   accessorKey: "username",
+    //   header: "Username",
+    // },
     // {
     //   accessorKey: "email",
     //   header: "Email",

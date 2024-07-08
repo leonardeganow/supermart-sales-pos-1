@@ -8,8 +8,6 @@ export async function DELETE(request: Request) {
   try {
     const data = await request.json();
 
-    console.log("Request data:", data);
-
     const currentUser = await getCurrentUser();
     if (currentUser) {
       const middlewareResponse = await checkAdminRole({ body: currentUser });

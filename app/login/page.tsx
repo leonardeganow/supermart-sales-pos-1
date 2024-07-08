@@ -20,7 +20,6 @@ import { Loader2 } from "lucide-react";
 import Logo from "@/components/header/Logo";
 import OnboardingRight from "@/components/OnboardingRight";
 import Link from "next/link";
-import userStore from "../store/userStore";
 
 const formSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),
