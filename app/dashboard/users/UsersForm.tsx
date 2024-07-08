@@ -77,7 +77,9 @@ function UsersForm(props: UserFormProps) {
 
         if (response.data.status) {
           props.refetch();
+          props.setShowModal(false);
           form.reset();
+          form.setValue("role", "");
           toast({ description: response.data.message });
         } else {
           toast({ description: response.data.message });
@@ -145,10 +147,7 @@ function UsersForm(props: UserFormProps) {
           userId: props.userData,
         };
 
-        console.log(data);
-
-        const response = await axios.delete("/api/deleteuser", {data});
-        console.log(response);
+        const response = await axios.delete("/api/deleteuser", { data });
 
         if (response.data.status) {
           setLoader(false);

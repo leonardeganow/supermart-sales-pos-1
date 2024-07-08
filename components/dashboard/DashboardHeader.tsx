@@ -7,11 +7,9 @@ import MobileMenu from "../header/MobileMenu";
 
 import DarkModeToggler from "./DarkModeToggler";
 import AvatarDropdown from "../header/AvatarDropdown";
-import userStore from "@/app/store/userStore";
 async function DashboardHeader() {
-  const user: ManagerSignup = await getCurrentUser();
+  const user: CurrentUser = await getCurrentUser();
 
-  
   if (!user) {
     redirect("/login");
     return null;

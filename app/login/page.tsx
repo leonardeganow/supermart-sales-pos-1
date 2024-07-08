@@ -34,14 +34,12 @@ const defaultValues: z.infer<typeof formSchema> = {
 
 function Page() {
   const router = useRouter();
-  const { setUserId } = userStore();
 
   const { toast } = useToast();
   const { data: session } = useSession();
 
   useEffect(() => {
     if (session?.user) {
-      setUserId(session.user.id);
       router.push("/dashboard");
     }
   }, [session, router]);

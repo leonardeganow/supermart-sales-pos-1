@@ -13,7 +13,7 @@ import getInitials from "@/app/helpers";
 import { signOut } from "next-auth/react";
 
 interface AvatarDropdownProps {
-  user: ManagerSignup;
+  user: CurrentUser;
 }
 function AvatarDropdown({ user }: AvatarDropdownProps) {
   return (

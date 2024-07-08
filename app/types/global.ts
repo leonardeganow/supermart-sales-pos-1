@@ -33,3 +33,13 @@ interface OnboardingRightProps {
   href: string;
   buttontext: string;
 }
+
+interface CurrentUser {
+  name: string;
+  email: string;
+  image: string;
+  id: string;
+  username: string;
+  role: string;
+  supermarketId: string;
+}

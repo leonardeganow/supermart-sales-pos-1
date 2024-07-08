@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { checkAdminRole } from "@/app/middlewares/authMiddleware";
 import { getCurrentUser } from "@/app/libs/session";
 
+export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const currentUser = await getCurrentUser();

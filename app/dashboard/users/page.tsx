@@ -56,18 +56,18 @@ function Page() {
   });
 
   const columns: ColumnDef<Payment>[] = [
-    {
-      accessorKey: "name",
-      header: "name",
-    },
+    // {
+    //   accessorKey: "name",
+    //   header: "name",
+    // },
     {
       accessorKey: "username",
       header: "Username",
     },
-    {
-      accessorKey: "email",
-      header: "Email",
-    },
+    // {
+    //   accessorKey: "email",
+    //   header: "Email",
+    // },
     {
       accessorKey: "role",
       header: "role",
