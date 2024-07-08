@@ -27,11 +27,12 @@ import { useToast } from "@/components/ui/use-toast";
 
 interface UserFormProps {
   refetch: () => void;
+  setShowModal: any;
   type: string;
   userData: any;
 }
 function UsersForm(props: UserFormProps) {
-  const { data: session }: any = useSession();
+  const [loader, setLoader] = React.useState(false);
   const { toast } = useToast();
   const defaultValues: ManagerSignup = {
     name: "",
@@ -93,9 +94,10 @@ function UsersForm(props: UserFormProps) {
           ...values,
         };
 
-        const response = await axios.put("/api/deleteusers", data);
+        const response = await axios.put("/api/editusers", data);
 
         if (response.data.status) {
+          props.setShowModal(false);
           props.refetch();
           form.reset();
           toast({ description: response.data.message });
@@ -103,6 +105,62 @@ function UsersForm(props: UserFormProps) {
           toast({ description: response.data.message });
         }
       } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (props.type === "delete") {
+      setLoader(true);
+      try {
+        const data: any = {
+          userId: props.userData,
+        };
+
+        console.log(data);
+
+        const response = await axios.delete("/api/deleteuser", data);
+        console.log(response);
+
+        if (response.data.status) {
+          setLoader(false);
+          props.setShowModal(false);
+          props.refetch();
+          toast({ description: response.data.message });
+        } else {
+          setLoader(false);
+          toast({ description: response.data.message });
+        }
+      } catch (error) {
+        setLoader(false);
+        console.error(error);
+      }
+    }
+  };
+
+  const deleteUser = async () => {
+    if (props.type === "delete") {
+      setLoader(true);
+      try {
+        const data: any = {
+          userId: props.userData,
+        };
+
+        console.log(data);
+
+        const response = await axios.delete("/api/deleteuser", {data});
+        console.log(response);
+
+        if (response.data.status) {
+          setLoader(false);
+          props.setShowModal(false);
+          props.refetch();
+          toast({ description: response.data.message });
+        } else {
+          setLoader(false);
+          toast({ description: response.data.message });
+        }
+      } catch (error) {
+        setLoader(false);
         console.error(error);
       }
     }
@@ -124,7 +182,26 @@ function UsersForm(props: UserFormProps) {
   return (
     <div>
       {props.type === "delete" ? (
-        <div>delete form goes here</div>
+        <div className="flex flex-col gap-y-4">
+          <p>
+            This action cannot be undone. This will permanently delete this
+            users data from our servers.
+          </p>
+
+          <div onClick={deleteUser} className="flex justify-end gap-x-4">
+            <Button>
+              {" "}
+              {loader ? (
+                <div className="flex justify-center items-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </div>
+              ) : (
+                "Continue"
+              )}
+            </Button>
+          </div>
+        </div>
       ) : (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
@@ -214,7 +291,13 @@ function UsersForm(props: UserFormProps) {
                   <FormLabel>User Role</FormLabel>
                   <Select onValueChange={field.onChange}>
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Roles" />
+                      <SelectValue
+                        placeholder={
+                          props.type === "edit"
+                            ? form.getValues("role")
+                            : "Roles"
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="manager">Manager</SelectItem>

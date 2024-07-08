@@ -24,7 +24,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Trigger } from "@radix-ui/react-dialog";
 
 export type Payment = {
   id: string;
@@ -138,7 +137,12 @@ function Page() {
                     : "Add new user"}
                 </DialogDescription>
               </DialogHeader>
-              <UsersForm refetch={refetch} userData={userData} type={type} />
+              <UsersForm
+                refetch={refetch}
+                userData={userData}
+                type={type}
+                setShowModal={setShowModal}
+              />
             </DialogContent>
           </Dialog>
         </div>
