@@ -24,6 +24,9 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
+import { Skeleton } from "@/components/ui/skeleton";
+import Loading from "./Loading";
+
 function Page() {
   const [type, setType] = React.useState("");
   const [userData, setUserData] = React.useState();
@@ -139,8 +142,10 @@ function Page() {
         </div>
       </div>
       <div className="mt-6">
-        {data && (
+        {data ? (
           <DataTable isFetching={isFetching} columns={columns} data={data} />
+        ) : (
+          <Loading />
         )}
       </div>
     </div>
