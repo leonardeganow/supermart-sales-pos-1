@@ -24,7 +24,6 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import Loading from "./Loading";
 
 function Page() {

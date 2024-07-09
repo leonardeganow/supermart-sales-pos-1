@@ -7,7 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Currency } from "lucide-react";
 import { DashboardAreaChart } from "@/components/dashboard/DashboardAreaChart";
 import { DashboardPieChart } from "@/components/dashboard/Piechart";
 import { DashboardTable } from "@/components/dashboard/DashboardTable";
@@ -81,6 +80,7 @@ async function Page() {
 
   return (
     <div>
+        <h1 className="text-2xl font-semibold mb-6 text-primary">Welcome, <span className="text-red-600">Shop n Save</span> </h1>
       <div className="flex-col flex sm:flex-row gap-y-4 justify-between sm:items-center">
         <div>
           <h1 className="font-semibold">Dashboard</h1>

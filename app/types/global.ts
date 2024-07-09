@@ -59,3 +59,14 @@ type Payment = {
   password: string;
   type: string;
 };
+
+type Product = {
+  name: string;
+  quantity: number;
+  inStock: boolean;
+  category: string;
+  basePrice: number;
+  sellingPrice: number;
+  image: string;
+  barcode: string;
+};
