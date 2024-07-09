@@ -14,54 +14,79 @@ import { BsBoxes } from "react-icons/bs";
 import { PiVan } from "react-icons/pi";
 import Logo from "../header/Logo";
 
+// Example user roles
+const USER_ROLES = {
+  ADMIN: "admin",
+  CASHIER: "cashier",
+  MANAGER: "manager",
+};
+
+// Define navItems with roles
 export const navItems = [
   {
     label: "Dashboard",
     path: "/dashboard",
     icon: <AiOutlineDashboard size={20} />,
+    roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER, USER_ROLES.CASHIER], // Both admin and user can see this
   },
   {
     label: "Products",
     path: "/dashboard/products",
     icon: <BsBoxes size={20} />,
+    roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER], // Only admin can see this
   },
   {
     label: "Orders",
     path: "/dashboard/orders",
     icon: <AiOutlineShoppingCart size={20} />,
+    roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER], // Both admin and user can see this
   },
   {
     label: "Suppliers",
     path: "/dashboard/suppliers",
     icon: <PiVan size={20} />,
+    roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER], // Only admin can see this
   },
   {
     label: "Reports",
     path: "/dashboard/reports",
     icon: <AiOutlineReconciliation size={20} />,
+    roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER], // Only admin can see this
   },
   {
     label: "Users",
     path: "/dashboard/users",
     icon: <AiOutlineTeam size={20} />,
+    roles: [USER_ROLES.ADMIN], // Only admin can see this
   },
   {
     label: "Settings",
     path: "/dashboard/settings",
     icon: <AiOutlineSetting size={20} />,
+    roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER], // Both admin and user can see this
   },
 ];
-function Sidebar() {
+
+interface SidebarProps {
+  user: CurrentUser;
+}
+
+function Sidebar(props: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [isClosed, setIsClosed] = useState<boolean>(false);
 
+  // Filter navItems based on user role
+  const filteredNavItems = navItems.filter((item) =>
+    item.roles.includes(props?.user?.role)
+  );
+
   const renderNavItems = () => {
-    return navItems.map((item) => (
+    return filteredNavItems.map((item) => (
       <div
         onClick={() => router.push(item.path)}
         key={item.label}
-        className={`hover:bg-red-100 hover:text-red-800 dark:hover:bg-white dark:hover:text-black   p-4 mb-2 rounded-lg cursor-pointer transition-all duration-100 ${
+        className={`hover:bg-red-100 hover:text-red-800 dark:hover:bg-white dark:hover:text-black p-4 mb-2 rounded-lg cursor-pointer transition-all duration-100 ${
           item.path === pathname
             ? "border-r-2 border-red-600 dark:border-white bg-red-200 text-red-800"
             : ""
@@ -73,9 +98,7 @@ function Sidebar() {
           } font-medium gap-x-4`}
         >
           {item.icon}
-          <p className={`${isClosed && "hidden"}  duration-200"}`}>
-            {item.label}
-          </p>{" "}
+          <p className={`${isClosed && "hidden"} duration-200`}>{item.label}</p>
         </div>
       </div>
     ));
@@ -84,11 +107,12 @@ function Sidebar() {
   const handleSidebarToggle = () => {
     setIsClosed((prev) => !prev);
   };
+
   return (
     <div
       className={`${
-        isClosed ? "w-28" : "w-64 "
-      }  transition-all duration-500 h-[100dvh] shadow border sm:flex flex-col justify-between hidden`}
+        isClosed ? "w-28" : "w-64"
+      } transition-all duration-500 h-[100dvh] shadow border sm:flex flex-col justify-between hidden`}
     >
       <div>
         <div className="h-[8dvh] border-b flex flex-col justify-center">
@@ -108,20 +132,20 @@ function Sidebar() {
       </div>
 
       <div
-        className={`flex justify-end border-t  pt-2 px-2 ${
+        className={`flex justify-end border-t pt-2 px-2 ${
           isClosed ? "justify-center" : "gap-10"
         }`}
       >
         {isClosed ? (
           <AiOutlineRight
             size={22}
-            className="cursor-pointer  mb-2  text-muted-foreground hover:text-red-500"
+            className="cursor-pointer mb-2 text-muted-foreground hover:text-red-500"
             onClick={() => setIsClosed((prev) => !prev)}
           />
         ) : (
           <AiOutlineLeft
             size={22}
-            className="cursor-pointer  mb-2 text-muted-foreground hover:text-red-500"
+            className="cursor-pointer mb-2 text-muted-foreground hover:text-red-500"
             onClick={handleSidebarToggle}
           />
         )}

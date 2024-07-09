@@ -13,16 +13,15 @@ import { ColumnDef } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuItem,
+  DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
-import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 import ProductForm from "./ProductForm";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Link from "next/link";
 import Image from "next/image";
 
 function Page() {
@@ -44,6 +43,9 @@ function Page() {
           </div>
         );
       },
+      cell: ({ row }) => {
+        return <div className="block">{row.original.name}</div>;
+      },
     },
 
     {
@@ -58,6 +60,9 @@ function Page() {
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </div>
         );
+      },
+      cell: ({ row }) => {
+        return <div className="block">{row.original.quantity}</div>;
       },
     },
     {
@@ -75,13 +80,18 @@ function Page() {
       },
       cell: ({ row }) => {
         const inStock = row.original.inStock ? (
-          <div className="bg-green-500 rounded-lg"> in stock</div>
+          <div className="bg-green-500 rounded-lg ">
+            {" "}
+            in stock
+          </div>
         ) : (
-          <div className="bg-red-500  rounded-lg">out of stock</div>
+          <div className="bg-red-500  rounded-lg ">out of stock</div>
         );
 
         return (
-          <div className="text-center text-white font-medium">{inStock}</div>
+          <div className="text-center w-1/2 text-white font-medium block">
+            {inStock}
+          </div>
         );
       },
     },
@@ -98,6 +108,9 @@ function Page() {
           </div>
         );
       },
+      cell: ({ row }) => {
+        return <div className="block">{row.original.category}</div>;
+      },
     },
     {
       accessorKey: "basePrice",
@@ -112,18 +125,26 @@ function Page() {
           </div>
         );
       },
+      cell: ({ row }) => {
+        return <div className="block">{row.original.basePrice}</div>;
+      },
     },
     {
       accessorKey: "sellingPrice",
       header: ({ column }) => {
         return (
           <div
-            className="flex items-center"
+            className=" flex items-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Selling price
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </div>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="block">{row.original.sellingPrice}</div>
         );
       },
     },
@@ -143,9 +164,10 @@ function Page() {
       cell: ({ row }) => {
         return (
           <Image
+            className="rounded-lg"
             src={row.original.image}
-            width={20}
-            height={20}
+            width={30}
+            height={30}
             alt={row.original.name}
           />
         );
@@ -156,13 +178,16 @@ function Page() {
       header: ({ column }) => {
         return (
           <div
-            className="flex items-center"
+            className=" flex items-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Barcode
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </div>
         );
+      },
+      cell: ({ row }) => {
+        return <div className="block">{row.original.barcode}</div>;
       },
     },
     {

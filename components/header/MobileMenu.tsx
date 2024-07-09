@@ -4,11 +4,19 @@ import { navItems } from "../dashboard/Sidebar";
 import Logo from "./Logo";
 import { useRouter } from "next/navigation";
 
-function MobileMenu() {
+interface MobileMenuProps {
+  user: CurrentUser;
+}
+function MobileMenu(props: MobileMenuProps) {
   const router = useRouter();
 
+  // Filter navItems based on user role
+  const filteredNavItems = navItems.filter((item) =>
+    item.roles.includes(props.user.role)
+  );
+
   const renderNavItems = () => {
-    return navItems.map((item) => (
+    return filteredNavItems.map((item) => (
       <div
         onClick={() => router.push(item.path)}
         key={item.label}

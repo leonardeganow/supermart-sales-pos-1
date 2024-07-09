@@ -161,7 +161,7 @@ function ProductForm(props: UserFormProps) {
 
   useEffect(() => {
     displayBase64Image();
-  }, [selectedFile]);
+  }, [selectedFile, setSelectedFile]);
 
   return (
     <div>
@@ -216,7 +216,7 @@ function ProductForm(props: UserFormProps) {
               )}
             />
 
-            <div className="flex justify-between  items-center ">
+            <div className="flex justify-between gap-x-2 items-center ">
               <FormField
                 control={form.control}
                 name="quantity"
@@ -300,33 +300,46 @@ function ProductForm(props: UserFormProps) {
                 )}
               />
             </div>
+            <div className="flex gap-x-4">
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Image</FormLabel>
+                    <Input
+                      onChange={(e: any) => {
+                        const file = e.target.files[0];
+                        setSelectedFile(file);
+                        field.onChange(e);
+                      }}
+                      type="file"
+                      id="file-input"
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Image</FormLabel>
-                  <Input
-                    onChange={(e: any) => {
-                      const file = e.target.files[0];
-                      setSelectedFile(file);
-                      field.onChange(e);
-                    }}
-                    type="file"
-                    id="file-input"
-                  />
-                  <FormMessage />
-                </FormItem>
+              {base64Image && (
+                <Image
+                  className="rounded-lg"
+                  src={base64Image}
+                  width={70}
+                  height={70}
+                  alt=""
+                />
               )}
-            />
-
-            <Image
-              src={base64Image ? base64Image : props.userData.image}
-              width={80}
-              height={80}
-              alt=""
-            />
+              {props?.type === "edit" && !selectedFile && (
+                <Image
+                  className="rounded-lg"
+                  src={props?.userData?.image}
+                  width={70}
+                  height={70}
+                  alt=""
+                />
+              )}
+            </div>
 
             <Button disabled={form.formState.isSubmitting} type="submit">
               {form.formState.isSubmitting ? (

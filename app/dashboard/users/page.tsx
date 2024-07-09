@@ -7,7 +7,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import UsersForm from "./UsersForm";
 import { useQuery } from "@tanstack/react-query";
@@ -117,7 +116,14 @@ function Page() {
 
         <div className="sm:flex-row sm:items-center gap-x-2  gap-y-4">
           <Dialog open={showModal} onOpenChange={setShowModal}>
-            <Button onClick={() => setShowModal(true)}>Add user</Button>
+            <Button
+              onClick={() => {
+                setType("");
+                setShowModal(true);
+              }}
+            >
+              Add user
+            </Button>
 
             <DialogContent>
               <DialogHeader>

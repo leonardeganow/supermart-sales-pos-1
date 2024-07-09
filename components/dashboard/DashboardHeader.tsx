@@ -1,16 +1,17 @@
 import React from "react";
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/app/libs/session";
 import { LiaHamburgerSolid } from "react-icons/lia";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import MobileMenu from "../header/MobileMenu";
 
 import DarkModeToggler from "./DarkModeToggler";
 import AvatarDropdown from "../header/AvatarDropdown";
-async function DashboardHeader() {
-  const user: CurrentUser = await getCurrentUser();
 
-  if (!user) {
+interface DashboardHeaderProps {
+  user: CurrentUser;
+}
+async function DashboardHeader(props: DashboardHeaderProps) {
+  if (!props.user) {
     redirect("/login");
     return null;
   }
@@ -26,7 +27,7 @@ async function DashboardHeader() {
           />
         </SheetTrigger>
         <SheetContent side="left">
-          <MobileMenu />
+          <MobileMenu  user={props.user}/>
         </SheetContent>
       </Sheet>
 
@@ -34,13 +35,13 @@ async function DashboardHeader() {
       <div className="flex items-center gap-x-5">
         {/* <LogoutButton /> */}
         <div className="sm:flex flex-col hidden">
-          <p className="capitalize">{user.name}</p>
+          <p className="capitalize">{props.user.name}</p>
           <p className="text-sm text-muted-foreground capitalize">
-            {user.role}
+            {props.user.role}
           </p>
         </div>
 
-        <AvatarDropdown user={user} />
+        <AvatarDropdown user={props.user} />
       </div>
     </div>
   );
