@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="">
-      <div className="sm:flex justify-between mb-4">
+      <div className="sm:flex justify-between items-center mb-4">
         <Input
           placeholder="Filter products..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -76,32 +76,31 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
+         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="my-2 sm:my-0">
+            <Button variant="outline" className="ml-auto mt-2 sm:mt-0">
               Columns
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter((column) => {
-                column.getCanHide();
-              })
+              .filter(
+                (column) => column.getCanHide()
+              )
               .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) => {
-                      console.log(value);
-                      column.toggleVisibility(!!value);
-                    }}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                );
+                )
               })}
           </DropdownMenuContent>
         </DropdownMenu>
