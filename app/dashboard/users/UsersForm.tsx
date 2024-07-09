@@ -80,32 +80,7 @@ function UsersForm(props: UserFormProps) {
       }
     }
 
-    if (props.type === "delete") {
-      setLoader(true);
-      try {
-        const data: any = {
-          userId: props.userData,
-        };
 
-        console.log(data);
-
-        const response = await axios.delete("/api/deleteuser", data);
-        console.log(response);
-
-        if (response.data.status) {
-          setLoader(false);
-          props.setShowModal(false);
-          props.refetch();
-          toast({ description: response.data.message });
-        } else {
-          setLoader(false);
-          toast({ description: response.data.message });
-        }
-      } catch (error) {
-        setLoader(false);
-        console.error(error);
-      }
-    }
   };
 
   const deleteUser = async () => {
@@ -135,7 +110,7 @@ function UsersForm(props: UserFormProps) {
   };
 
   useEffect(() => {
-    if (props.userData) {
+    if (props.type==="edit") {
       form.setValue("name", props.userData.name);
       form.setValue("phone", props.userData.phone);
       form.setValue("email", props.userData.email);

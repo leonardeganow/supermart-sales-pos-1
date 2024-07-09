@@ -48,11 +48,11 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="relative rounded-md border">
-        {/* {isFetching && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10">
-          <Loader className="animate-spin h-10 w-10 text-gray-500" />
-        </div>
-      )} */}
+        {isFetching && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10">
+            <Loader className="animate-spin h-10 w-10 text-gray-500" />
+          </div>
+        )}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
