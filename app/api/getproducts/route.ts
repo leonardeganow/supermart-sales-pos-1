@@ -10,6 +10,8 @@ export async function GET() {
   try {
     const currentUser = await getCurrentUser();
 
+    // console.log(currentUser);
+
     // Check if the requester is an admin
     const middlewareResponse = await checkAdminRole({ body: currentUser });
     if (middlewareResponse) return middlewareResponse;

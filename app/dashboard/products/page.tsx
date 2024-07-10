@@ -246,7 +246,7 @@ function Page() {
   });
 
   return (
-    <div>
+    <div className="">
       <div className="flex-col flex sm:flex-row gap-y-4 justify-between sm:items-center">
         <div>
           <h1 className="font-semibold">Product management</h1>

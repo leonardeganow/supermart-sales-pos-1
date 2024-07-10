@@ -27,7 +27,7 @@ import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 
-const supermarketCategories = [
+export const supermarketCategories = [
   "Fruits and Vegetables",
   "Dairy Products",
   "Bakery",
