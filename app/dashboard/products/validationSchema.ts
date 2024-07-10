@@ -8,6 +8,7 @@ const formSchema = z.object({
   sellingPrice: z.string().min(1, { message: "sellingPrice is required" }),
   image: z.string().min(1, { message: "image is required" }),
   barcode: z.string().min(1, { message: "barcode is required" }),
+  currency: z.string().min(1, { message: "currency is required" }),
 });
 
 export default formSchema;

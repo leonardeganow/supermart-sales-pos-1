@@ -23,7 +23,8 @@ import ProductForm from "./ProductForm";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
-
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 function Page() {
   const [type, setType] = React.useState("");
   const [userData, setUserData] = React.useState();
@@ -35,8 +36,8 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Name
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -54,8 +55,8 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Quantity
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -71,8 +72,8 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             In stock
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -87,9 +88,9 @@ function Page() {
         );
 
         return (
-          <div className="text-center w-1/2 text-white font-medium block">
-            {inStock}
-          </div>
+          <Badge variant={row.original.inStock ? "secondary" : "destructive"}>
+            {row.original.inStock ? "In Stock" : "Out of Stock"}
+          </Badge>
         );
       },
     },
@@ -98,9 +99,8 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
-          
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Category
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -116,8 +116,8 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Base price
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -134,7 +134,6 @@ function Page() {
         return (
           <Button
             variant="ghost"
-          
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Selling price
@@ -151,8 +150,8 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Image
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -176,8 +175,8 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Barcode
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -287,7 +286,7 @@ function Page() {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 ">
         {data && (
           <DataTable columns={columns} data={data} isFetching={isFetching} />
         )}

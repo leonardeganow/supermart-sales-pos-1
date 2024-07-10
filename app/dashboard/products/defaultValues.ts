@@ -6,6 +6,7 @@ const defaultValues = {
   sellingPrice: "",
   image: "",
   barcode: "",
+  currency: "",
 };
 
 export default defaultValues;

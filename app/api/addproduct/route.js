@@ -9,6 +9,8 @@ export async function POST(request) {
   try {
     const data = await request.json();
 
+    console.log(data);
+
     const currentUser = await getCurrentUser();
 
     const imageUrl = await uploadToCloudinary(data.imageBase64);
@@ -25,6 +27,7 @@ export async function POST(request) {
       quantity: data.quantity,
       inStock: true,
       category: data.category,
+      currency: data.currency,
       image: imageUrl,
       barcode: data.barcode,
       createdBy: currentUser.id,

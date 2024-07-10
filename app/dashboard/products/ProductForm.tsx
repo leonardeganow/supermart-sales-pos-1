@@ -136,11 +136,15 @@ function ProductForm(props: UserFormProps) {
     }
   };
 
+  console.log(props.userData);
+  
+
   useEffect(() => {
     if (props.type === "edit") {
       form.setValue("name", props.userData.name);
       form.setValue("quantity", props.userData.quantity.toString());
       form.setValue("category", props.userData.category);
+      form.setValue("currency", props.userData.currency);
       form.setValue("basePrice", props.userData.basePrice.toString());
       form.setValue("sellingPrice", props.userData.sellingPrice.toString());
       form.setValue("barcode", props.userData.barcode);
@@ -265,6 +269,31 @@ function ProductForm(props: UserFormProps) {
             </div>
 
             <div className="flex justify-between gap-x-2 items-center">
+              <FormField
+                control={form.control}
+                name="currency"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Currency</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <SelectTrigger className="">
+                        <SelectValue
+                          placeholder={
+                            props.type === "edit"
+                              ? form.getValues("currency")
+                              : "Currency"
+                          }
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="GHS">cedi</SelectItem>
+                        <SelectItem value="USD">dollars</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="basePrice"

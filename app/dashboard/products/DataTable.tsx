@@ -29,6 +29,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -109,7 +110,7 @@ export function DataTable<TData, TValue>({
             <Loader className="animate-spin h-10 w-10 text-gray-500" />
           </div>
         )}
-        <div className="">
+        <ScrollArea className="mt-6 sm:w-full w-[300px]">
           <Table className=" ">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -159,7 +160,8 @@ export function DataTable<TData, TValue>({
               )}
             </TableBody>
           </Table>
-        </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>{" "}
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button

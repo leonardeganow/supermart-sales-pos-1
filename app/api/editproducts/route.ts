@@ -9,7 +9,6 @@ export async function PUT(request: Request) {
   try {
     const data = await request.json();
 
-    console.log(data);
 
     const imageUrl = await uploadToCloudinary(data.imageBase64);
 
@@ -34,6 +33,7 @@ export async function PUT(request: Request) {
       if (data.name) product.name = data.name;
       if (data.quantity) product.quantity = data.quantity;
       if (data.category) product.category = product.category;
+      if (data.currency) product.currency = data.currency;
       if (data.basePrice) product.basePrice = data.basePrice;
       if (data.sellingPrice) product.sellingPrice = data.sellingPrice;
       if (data.barcode) product.barcode = data.barcode;
@@ -42,6 +42,7 @@ export async function PUT(request: Request) {
       if (data.name) product.name = data.name;
       if (data.quantity) product.quantity = data.quantity;
       if (data.category) product.category = product.category;
+      if (data.currency) product.currency = product.currency;
       if (data.basePrice) product.basePrice = data.basePrice;
       if (data.sellingPrice) product.sellingPrice = data.sellingPrice;
       if (data.barcode) product.barcode = data.barcode;

@@ -9,12 +9,18 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  currency: {
+    type: String,
+    enum: ["GHS", "USD"],
+    required: true,
+  },
   inStock: {
     type: Boolean,
     required: true,
   },
   category: {
     type: String,
+
     required: true,
   },
   basePrice: {
