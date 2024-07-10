@@ -34,13 +34,13 @@ function Page() {
       accessorKey: "name",
       header: ({ column }) => {
         return (
-          <div
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Name
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          </div>
+          </Button>
         );
       },
       cell: ({ row }) => {
@@ -50,15 +50,16 @@ function Page() {
 
     {
       accessorKey: "quantity",
+
       header: ({ column }) => {
         return (
-          <div
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Quantity
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          </div>
+          </Button>
         );
       },
       cell: ({ row }) => {
@@ -69,21 +70,18 @@ function Page() {
       accessorKey: "inStock",
       header: ({ column }) => {
         return (
-          <div
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             In stock
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          </div>
+          </Button>
         );
       },
       cell: ({ row }) => {
         const inStock = row.original.inStock ? (
-          <div className="bg-green-500 rounded-lg ">
-            {" "}
-            in stock
-          </div>
+          <div className="bg-green-500 rounded-lg "> in stock</div>
         ) : (
           <div className="bg-red-500  rounded-lg ">out of stock</div>
         );
@@ -99,13 +97,14 @@ function Page() {
       accessorKey: "category",
       header: ({ column }) => {
         return (
-          <div
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button
+          
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Category
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          </div>
+          </Button>
         );
       },
       cell: ({ row }) => {
@@ -116,13 +115,13 @@ function Page() {
       accessorKey: "basePrice",
       header: ({ column }) => {
         return (
-          <div
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Base price
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          </div>
+          </Button>
         );
       },
       cell: ({ row }) => {
@@ -133,32 +132,31 @@ function Page() {
       accessorKey: "sellingPrice",
       header: ({ column }) => {
         return (
-          <div
-            className=" flex items-center"
+          <Button
+            variant="ghost"
+          
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Selling price
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          </div>
+          </Button>
         );
       },
       cell: ({ row }) => {
-        return (
-          <div className="block">{row.original.sellingPrice}</div>
-        );
+        return <div className="block">{row.original.sellingPrice}</div>;
       },
     },
     {
       accessorKey: "image",
       header: ({ column }) => {
         return (
-          <div
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Image
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          </div>
+          </Button>
         );
       },
       cell: ({ row }) => {
@@ -177,13 +175,13 @@ function Page() {
       accessorKey: "barcode",
       header: ({ column }) => {
         return (
-          <div
-            className=" flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Barcode
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          </div>
+          </Button>
         );
       },
       cell: ({ row }) => {

@@ -31,6 +31,7 @@
     "cloudinary": "^2.2.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "embla-carousel-react": "^8.1.6",
     "jose": "^5.6.3",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.399.0",

@@ -32,7 +32,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json(
       {
-        message: "User deleted successfully",
+        message: "Product deleted successfully",
         status: true,
       },
       { status: 200 }

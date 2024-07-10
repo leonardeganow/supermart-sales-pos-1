@@ -23,12 +23,14 @@ export default function RootLayout({
   const queryClient = new QueryClient();
   return (
     <html lang="en">
-      <Head>
+      {/* <Head>
+        <meta property="og:title" content="Quickmart" />
+        <meta property="og:description" content="A pos system web app" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1 user-scalable=no"
         />
-      </Head>
+      </Head> */}
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>
           <SessionProvider>
