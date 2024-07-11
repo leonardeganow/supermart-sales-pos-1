@@ -11,10 +11,7 @@ interface DashboardHeaderProps {
   user: CurrentUser;
 }
 async function DashboardHeader(props: DashboardHeaderProps) {
-  if (!props.user) {
-    redirect("/login");
-    return null;
-  }
+
 
   return (
     <div className="p-5 flex justify-between border items-center gap-x-8 h-[8dvh] ">
