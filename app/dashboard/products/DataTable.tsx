@@ -110,7 +110,7 @@ export function DataTable<TData, TValue>({
             <Loader className="animate-spin h-10 w-10 text-gray-500" />
           </div>
         )}
-        <ScrollArea className="mt-6 sm:w-full w-[300px]">
+        <ScrollArea className="mt-6 sm:w-full w-[300px] mx-auto">
           <Table className=" ">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

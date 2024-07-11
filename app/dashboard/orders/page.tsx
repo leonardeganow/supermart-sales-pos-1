@@ -244,7 +244,7 @@ function Page() {
 
           <div className="grid lg:grid-cols-3 gap-4">{renderProducts()}</div>
         </div>
-        <div className="lg:col-span-3 md:col-span-6  sm:block border-l border-gray-300 dark:border-gray-700 p-4">
+        <div className="lg:col-span-3 md:col-span-6  sm:block sm:border-l border-gray-300 dark:border-gray-700 p-4">
           <h1 className="font-semibold">Order checkout</h1>
           <hr className="my-4" />
           <div className="flex justify-between items-center">
@@ -328,7 +328,7 @@ function Page() {
             ))}
           </div>
           <hr className="my-4" />
-          <div className="flex flex-col gap-3 bg-gray-100 text-gray-600 p-2 rounded-lg font-semibold mb-2">
+          <div className="flex flex-col gap-3  bg-muted  p-2 rounded-lg font-semibold mb-2">
             <div className="flex justify-between">
               <p className="font-semibold">Sub Total</p>
               <p>
