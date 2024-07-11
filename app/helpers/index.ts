@@ -16,15 +16,87 @@ export default function getInitials(name: string) {
   return initials.join("");
 }
 
-// export async function removeImageBackground(url: string) {
-//   try {
-//     const blob = await imglyRemoveBackground(url);
-//     const newImage = URL.createObjectURL(blob);
+//NOTE - function to add products to cart
+export const addToCart = (product: any, setterstate: () => void) => {
+  setterstate((prev): any => {
+    const existingProduct = prev.find((item: any) => item._id === product._id);
+    if (existingProduct) {
+      return prev.map((item: any) =>
+        item._id === product._id
+          ? {
+              ...item,
+              quantity: item.quantity + 1,
+              totalPrice: (item.quantity + 1) * item.sellingPrice,
+            }
+          : item
+      );
+    }
+    return [
+      ...prev,
+      { ...product, quantity: 1, totalPrice: product.sellingPrice },
+    ];
+  });
+};
 
-//     console.log(newImage);
-    
-//     return newImage;
-//   } catch (error) {
-//     console.error("Error removing background:", error);
-//   }
-// }
+//NOTE - increase item quantity
+export const increaseQuantity = (id: string, setterstate: () => void) => {
+  setterstate((prev) =>
+    prev.map((item) =>
+      item._id === id
+        ? {
+            ...item,
+            quantity: item.quantity + 1,
+            totalPrice:
+              (item.quantity + 1) *
+              (item.sellingPrice -
+                (item.sellingPrice * (item.discount || 0)) / 100),
+          }
+        : item
+    )
+  );
+};
+
+//NOTE - decrease item quantity
+export const decreaseQuantity = (id: string, setterstate: () => void) => {
+  setterstate((prev) =>
+    prev.map((item) =>
+      item._id === id
+        ? {
+            ...item,
+            quantity: Math.max(1, item.quantity - 1),
+            totalPrice:
+              Math.max(1, item.quantity - 1) *
+              (item.sellingPrice -
+                (item.sellingPrice * (item.discount || 0)) / 100),
+          }
+        : item
+    )
+  );
+};
+
+//NOTE - function to set discount
+export const setDiscount = (
+  id: string,
+  discount: number,
+  setterstate: () => void
+) => {
+  setterstate((prev) =>
+    prev.map((item) => {
+      const validDiscount = isNaN(discount) || discount < 0 ? 0 : discount;
+      return item._id === id
+        ? {
+            ...item,
+            discount: validDiscount,
+            totalPrice:
+              item.quantity *
+              (item.sellingPrice - (item.sellingPrice * validDiscount) / 100),
+          }
+        : item;
+    })
+  );
+};
+
+//NOTE - clear cart
+export const removeFromCart = (id: string, setterstate: () => void) => {
+  setterstate((prev) => prev.filter((item) => item._id !== id));
+};

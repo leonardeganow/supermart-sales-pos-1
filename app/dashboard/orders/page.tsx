@@ -17,11 +17,10 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { supermarketCategories } from "../products/ProductForm";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Delete, DeleteIcon, LucideDelete, Minus, Plus } from "lucide-react";
-import { XCircle } from "lucide-react";
-import { AiOutlineDelete } from "react-icons/ai";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Checkbox } from "@/components/ui/checkbox";
+
+import CheckoutPanel from "@/components/dashboard/orders/CheckoutPanel";
+import OrderCategoryCarousel from "@/components/dashboard/orders/OrderCategoryCarousel";
+import { addToCart } from "@/app/helpers";
 
 function Page() {
   const [keyword, setKeyword] = useState<string>("");
@@ -88,7 +87,7 @@ function Page() {
               </CardDescription>
             </div>
             <Button
-              onClick={() => addToCart(product)}
+              onClick={() => addToCart(product, setCart)}
               variant="outline"
               size="icon"
             >
@@ -102,79 +101,12 @@ function Page() {
     return <h1>No products found</h1>;
   };
 
-  const addToCart = (product: any) => {
-    setCart((prev): any => {
-      const existingProduct = prev.find(
-        (item: any) => item._id === product._id
-      );
-      if (existingProduct) {
-        return prev.map((item: any) =>
-          item._id === product._id
-            ? {
-                ...item,
-                quantity: item.quantity + 1,
-                totalPrice: (item.quantity + 1) * item.sellingPrice,
-              }
-            : item
-        );
-      }
-      return [
-        ...prev,
-        { ...product, quantity: 1, totalPrice: product.sellingPrice },
-      ];
-    });
-  };
+  
 
-  const increaseQuantity = (id: string) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item._id === id
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-              totalPrice:
-                (item.quantity + 1) *
-                (item.sellingPrice -
-                  (item.sellingPrice * (item.discount || 0)) / 100),
-            }
-          : item
-      )
-    );
-  };
 
-  const decreaseQuantity = (id: string) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item._id === id
-          ? {
-              ...item,
-              quantity: Math.max(1, item.quantity - 1),
-              totalPrice:
-                Math.max(1, item.quantity - 1) *
-                (item.sellingPrice -
-                  (item.sellingPrice * (item.discount || 0)) / 100),
-            }
-          : item
-      )
-    );
-  };
 
-  const setDiscount = (id: string, discount: number) => {
-    setCart((prev) =>
-      prev.map((item) => {
-        const validDiscount = isNaN(discount) || discount < 0 ? 0 : discount;
-        return item._id === id
-          ? {
-              ...item,
-              discount: validDiscount,
-              totalPrice:
-                item.quantity *
-                (item.sellingPrice - (item.sellingPrice * validDiscount) / 100),
-            }
-          : item;
-      })
-    );
-  };
+
+
 
   const removeFromCart = (id: string) => {
     setCart((prev) => prev.filter((item) => item._id !== id));
@@ -229,166 +161,21 @@ function Page() {
           <hr className="my-8" />
 
           <div className="sm:px-12 mb-8">
-            <Carousel className="w-[250px] sm:w-full mx-auto sm:mx-0">
-              <CarouselContent>
-                {supermarketCategories.map((category) => {
-                  return (
-                    <CarouselItem key={category} className="basis-1/8">
-                      <Button
-                        onClick={() => {
-                          setKeyword(category);
-                          refetch();
-                        }}
-                        variant="outline"
-                      >
-                        {category}
-                      </Button>
-                    </CarouselItem>
-                  );
-                })}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
+            <OrderCategoryCarousel setKeyword={setKeyword} refetch={refetch} />
           </div>
 
           <div className="grid lg:grid-cols-3 gap-4">{renderProducts()}</div>
         </div>
-        <div className="lg:col-span-3 md:col-span-6  sm:block sm:border-l border-gray-300 dark:border-gray-700 p-4">
-          <h1 className="font-semibold">Order checkout</h1>
-          <hr className="my-4" />
-          <div className="flex justify-between items-center">
-            <p>{cart.length} items Selected</p>
-            <Button
-              onClick={() => setCart([])}
-              variant="ghost"
-              className="text-red-500"
-            >
-              Clear all
-            </Button>
-          </div>
-
-          <div className="flex flex-col gap-y-8 mt-4 h-[50dvh] overflow-y-scroll">
-            {cart.map((product: any) => (
-              <div key={product._id} className="relative">
-                <div className="flex gap-2">
-                  <div>
-                    <Image
-                      src={product.image}
-                      className=""
-                      width={120}
-                      height={100}
-                      alt=""
-                    />
-                  </div>
-                  <div className="flex-1 ">
-                    <p className="font-semibold">{product.name}</p>
-                    <p className="">{product.category}</p>
-                    <div className="flex justify-between pt-4 items-center">
-                      <label htmlFor={`discount-${product._id}`}>
-                        Discount:
-                      </label>
-                      <Input
-                        id={`discount-${product._id}`}
-                        type="number"
-                        className="w-16"
-                        value={product.discount || ""}
-                        onChange={(e) =>
-                          setDiscount(product._id, parseFloat(e.target.value))
-                        }
-                      />
-                    </div>
-
-                    <div className="flex justify-between pt-4">
-                      <div className="flex items-center gap-2">
-                        <Button
-                          className="w-8 h-7"
-                          variant="outline"
-                          size="icon"
-                          onClick={() => increaseQuantity(product._id)}
-                        >
-                          <Plus className="h-4 w-4" />
-                        </Button>
-                        <p>{product.quantity}</p>
-                        <Button
-                          onClick={() => decreaseQuantity(product._id)}
-                          className="w-8 h-7"
-                          variant="outline"
-                          size="icon"
-                        >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          onClick={() => removeFromCart(product._id)}
-                          className="w-8 h-7 absolute right-0 top-0 text-red-500"
-                          variant="outline"
-                          size="icon"
-                        >
-                          <AiOutlineDelete className="h-4 w-4 " />
-                        </Button>
-                      </div>
-                      <p className="font-semibold">
-                        {product.currency === "GHS" ? "₵" : "$"}
-                        {product.totalPrice}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <hr className="my-4" />
-          <div className="flex items-center space-x-2 pb-2">
-            <Checkbox
-              onClick={() =>
-                setTaxRate((prev: number) => {
-                  return prev === 0.175 ? 0 : 0.175;
-                })
-              }
-              id="terms"
-            />
-            <label
-              htmlFor="terms"
-              className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Add composite tax (17.5%)
-            </label>
-          </div>
-          <div className="flex flex-col gap-3  bg-muted  p-2 rounded-lg font-semibold mb-2">
-            <div className="flex justify-between">
-              <p className="font-semibold">Sub Total</p>
-              <p>
-                {totalBeforeDiscount.toFixed(2)}{" "}
-                {cart.length > 0 && cart[0].currency}
-              </p>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <p className="font-semibold">Discount</p>
-              <p className="text-red-500">
-                -{totalDiscount.toFixed(2)}{" "}
-                {cart.length > 0 && cart[0].currency}
-              </p>
-            </div>
-            {taxPayable !== 0 && (
-              <div className="flex justify-between items-center">
-                <p className="font-semibold">Tax</p>
-                <p className="text-red-500">
-                  -{taxPayable.toFixed(2)} {cart.length > 0 && cart[0].currency}
-                </p>
-              </div>
-            )}
-            <hr />
-            <div className="flex justify-between items-center">
-              <p className="font-semibold">You Pay</p>
-              <p className=" font-semibold">
-                {finalTotal.toFixed(2)} {cart.length > 0 && cart[0].currency}
-              </p>
-            </div>
-          </div>
-          <Button className="w-full">Pay</Button>
-        </div>
+        <CheckoutPanel
+          cart={cart}
+          totalDiscount={totalDiscount}
+          finalTotal={finalTotal}
+          taxPayable={taxPayable}
+          totalBeforeDiscount={totalBeforeDiscount}
+          setCart={setCart}
+          removeFromCart={removeFromCart}
+          setTaxRate={setTaxRate}
+        />
       </div>
     </div>
   );
