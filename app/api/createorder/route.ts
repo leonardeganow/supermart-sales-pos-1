@@ -22,9 +22,6 @@ export async function POST(request: any) {
       orderStatus: "success",
     });
 
-    console.log(newOrder);
-    
-
     await newOrder.save();
 
     return NextResponse.json(

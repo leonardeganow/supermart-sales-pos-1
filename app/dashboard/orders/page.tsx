@@ -139,7 +139,6 @@ function Page() {
       // console.log(data);
 
       const response = await axios.post("/api/createorder", data);
-console.log(response)
       if (response.data.status) {
         toast(response.data.message);
         // Clear the cart
