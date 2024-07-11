@@ -4,18 +4,11 @@ import { Input } from "@/components/ui/input";
 import React, { useState, useEffect } from "react";
 import { CiBarcode } from "react-icons/ci";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+
 import Image from "next/image";
 import { TbGardenCart } from "react-icons/tb";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { supermarketCategories } from "../products/ProductForm";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import CheckoutPanel from "@/components/dashboard/orders/CheckoutPanel";
@@ -24,7 +17,7 @@ import { addToCart } from "@/app/helpers";
 
 function Page() {
   const [keyword, setKeyword] = useState<string>("");
-  const [cart, setCart] = useState<any[]>([]);
+  const [cart, setCart] = useState([]);
   const [total, setTotal] = useState<number>(0);
   const [totalBeforeDiscount, setTotalBeforeDiscount] = useState<number>(0);
   const [taxRate, setTaxRate] = useState<number>(0);
@@ -101,22 +94,14 @@ function Page() {
     return <h1>No products found</h1>;
   };
 
-  
-
-
-
-
-
-
-  const removeFromCart = (id: string) => {
-    setCart((prev) => prev.filter((item) => item._id !== id));
-  };
-
   // Updated calculateTotal function
   const calculateTotal = () => {
-    const totalAmount = cart.reduce((acc, item) => acc + item.totalPrice, 0);
+    const totalAmount = cart.reduce(
+      (acc, item: any) => acc + item.totalPrice,
+      0
+    );
     const totalOriginalPrice = cart.reduce(
-      (acc, item) => acc + item.quantity * item.sellingPrice,
+      (acc, item: any) => acc + item.quantity * item.sellingPrice,
       0
     );
     const totalDiscountAmount = totalOriginalPrice - totalAmount;
@@ -158,6 +143,7 @@ function Page() {
               />
             </div>
           </div>
+
           <hr className="my-8" />
 
           <div className="sm:px-12 mb-8">
@@ -173,7 +159,6 @@ function Page() {
           taxPayable={taxPayable}
           totalBeforeDiscount={totalBeforeDiscount}
           setCart={setCart}
-          removeFromCart={removeFromCart}
           setTaxRate={setTaxRate}
         />
       </div>

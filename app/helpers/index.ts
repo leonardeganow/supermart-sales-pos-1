@@ -17,7 +17,7 @@ export default function getInitials(name: string) {
 }
 
 //NOTE - function to add products to cart
-export const addToCart = (product: any, setterstate: () => void) => {
+export const addToCart = (product: any, setterstate: any) => {
   setterstate((prev): any => {
     const existingProduct = prev.find((item: any) => item._id === product._id);
     if (existingProduct) {
