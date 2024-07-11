@@ -21,14 +21,17 @@ import { Delete, DeleteIcon, LucideDelete, Minus, Plus } from "lucide-react";
 import { XCircle } from "lucide-react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Checkbox } from "@/components/ui/checkbox";
 
 function Page() {
   const [keyword, setKeyword] = useState<string>("");
   const [cart, setCart] = useState<any[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [totalBeforeDiscount, setTotalBeforeDiscount] = useState<number>(0);
-
+  const [taxRate, setTaxRate] = useState<number>(0);
   const [totalDiscount, setTotalDiscount] = useState<number>(0);
+  const [finalTotal, setFinalTotal] = useState<number>(0);
+  const [taxPayable, setTaxPayable] = useState<number>(0);
 
   const searchProducts = async () => {
     const data = { keyword: keyword };
@@ -172,10 +175,12 @@ function Page() {
       })
     );
   };
+
   const removeFromCart = (id: string) => {
     setCart((prev) => prev.filter((item) => item._id !== id));
   };
 
+  // Updated calculateTotal function
   const calculateTotal = () => {
     const totalAmount = cart.reduce((acc, item) => acc + item.totalPrice, 0);
     const totalOriginalPrice = cart.reduce(
@@ -183,14 +188,19 @@ function Page() {
       0
     );
     const totalDiscountAmount = totalOriginalPrice - totalAmount;
+    const taxPayable = totalAmount * taxRate;
+    const finalAmount = totalAmount + taxPayable;
+
+    setTaxPayable(taxPayable);
     setTotal(totalAmount);
     setTotalBeforeDiscount(totalOriginalPrice);
     setTotalDiscount(totalDiscountAmount);
+    setFinalTotal(finalAmount);
   };
 
   useEffect(() => {
     calculateTotal();
-  }, [cart]);
+  }, [cart, taxRate]);
 
   return (
     <div className="">
@@ -327,7 +337,24 @@ function Page() {
               </div>
             ))}
           </div>
+
           <hr className="my-4" />
+          <div className="flex items-center space-x-2 pb-2">
+            <Checkbox
+              onClick={() =>
+                setTaxRate((prev: number) => {
+                  return prev === 0.175 ? 0 : 0.175;
+                })
+              }
+              id="terms"
+            />
+            <label
+              htmlFor="terms"
+              className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Add composite tax (17.5%)
+            </label>
+          </div>
           <div className="flex flex-col gap-3  bg-muted  p-2 rounded-lg font-semibold mb-2">
             <div className="flex justify-between">
               <p className="font-semibold">Sub Total</p>
@@ -338,17 +365,25 @@ function Page() {
             </div>
 
             <div className="flex justify-between items-center">
-              <p className="font-semibold">Total Discount</p>
+              <p className="font-semibold">Discount</p>
               <p className="text-red-500">
                 -{totalDiscount.toFixed(2)}{" "}
                 {cart.length > 0 && cart[0].currency}
               </p>
             </div>
+            {taxPayable !== 0 && (
+              <div className="flex justify-between items-center">
+                <p className="font-semibold">Tax</p>
+                <p className="text-red-500">
+                  -{taxPayable.toFixed(2)} {cart.length > 0 && cart[0].currency}
+                </p>
+              </div>
+            )}
             <hr />
             <div className="flex justify-between items-center">
               <p className="font-semibold">You Pay</p>
-              <p className="text-green-700 font-semibold">
-                {total.toFixed(2)} {cart.length > 0 && cart[0].currency}
+              <p className=" font-semibold">
+                {finalTotal.toFixed(2)} {cart.length > 0 && cart[0].currency}
               </p>
             </div>
           </div>
