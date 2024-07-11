@@ -1,13 +1,30 @@
-import { decreaseQuantity, increaseQuantity, removeFromCart, setDiscount } from "@/app/helpers";
+import {
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+  setDiscount,
+} from "@/app/helpers";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
-function CheckoutPanel(props: any) {
+interface CheckoutPanelProps {
+  cart: any;
+  setCart: any;
+  totalDiscount: number;
+  finalTotal: number;
+  taxPayable: number;
+  totalBeforeDiscount: number;
+  setTaxRate: any;
+  makePayment: () => void;
+  setPaymentMethod: (param: string) => void;
+}
+function CheckoutPanel(props: CheckoutPanelProps) {
   return (
     <div className="lg:col-span-3 md:col-span-6  sm:block sm:border-l border-gray-300 dark:border-gray-700 p-4">
       <h1 className="font-semibold">Order checkout</h1>
@@ -23,7 +40,7 @@ function CheckoutPanel(props: any) {
         </Button>
       </div>
 
-      <div className="flex flex-col gap-y-8 mt-4 h-[50dvh] overflow-y-scroll">
+      <div className="flex flex-col gap-y-8 mt-4 h-[45dvh] overflow-y-scroll">
         {props.cart.map((product: any) => (
           <div key={product._id} className="relative">
             <div className="flex gap-2">
@@ -80,7 +97,7 @@ function CheckoutPanel(props: any) {
                       <Minus className="h-4 w-4" />
                     </Button>
                     <Button
-                      onClick={() => removeFromCart(product._id,props.setCart)}
+                      onClick={() => removeFromCart(product._id, props.setCart)}
                       className="w-8 h-7 absolute right-0 top-0 text-red-500"
                       variant="outline"
                       size="icon"
@@ -103,7 +120,7 @@ function CheckoutPanel(props: any) {
       <div className="flex items-center space-x-2 pb-2">
         <Checkbox
           onClick={() =>
-            props.setTaxRate((prev: number) => {
+            props.setTaxRate((prev: any) => {
               return prev === 0.175 ? 0 : 0.175;
             })
           }
@@ -116,7 +133,7 @@ function CheckoutPanel(props: any) {
           Add composite tax (17.5%)
         </label>
       </div>
-      <div className="flex flex-col gap-3  bg-muted  p-2 rounded-lg font-semibold mb-2">
+      <div className="flex flex-col gap-2  bg-muted  p-2 rounded-lg font-semibold mb-2">
         <div className="flex justify-between">
           <p className="font-semibold">Sub Total</p>
           <p>
@@ -150,7 +167,22 @@ function CheckoutPanel(props: any) {
           </p>
         </div>
       </div>
-      <Button className="w-full">Pay</Button>
+      <ToggleGroup variant="outline" type="single" className="my-4">
+        <ToggleGroupItem value="bold" aria-label="Toggle bold">
+          <p onClick={() => props.setPaymentMethod("cash")}>Cash</p>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="italic" aria-label="Toggle italic">
+          <p onClick={() => props.setPaymentMethod("mobile money")}>Momo</p>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="underline" aria-label="Toggle underline">
+          <p onClick={() => props.setPaymentMethod("credit card")}>
+            Credit card
+          </p>
+        </ToggleGroupItem>
+      </ToggleGroup>
+      <Button onClick={props.makePayment} className="w-full">
+        Pay
+      </Button>
     </div>
   );
 }

@@ -1,5 +1,10 @@
 import OnboardingRight from "@/components/OnboardingRight";
 import SignupMultistepIndex from "@/components/registrationMultistep/SignupMultistepIndex";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Quickmart - Onboarding",
+};
 export default function Home() {
   return (
     <div className="">

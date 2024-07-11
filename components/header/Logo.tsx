@@ -5,6 +5,8 @@ interface LogoProps {
   isClosed?: boolean;
   route?: string;
 }
+
+
 function Logo({ isClosed, route }: LogoProps) {
   return (
     <div className="flex justify-center items-center gap-1">
