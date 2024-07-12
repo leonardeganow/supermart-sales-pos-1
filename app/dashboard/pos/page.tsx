@@ -28,6 +28,7 @@ function Page() {
   const [taxPayable, setTaxPayable] = useState<number>(0);
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
   const [loader, setLoader] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const searchProducts = async () => {
     const data = { keyword: keyword };
@@ -153,6 +154,7 @@ function Page() {
       const response = await axios.post("/api/createorder", data);
       if (response.data.status) {
         setLoader(false);
+        setOpenModal(false);
         toast.success(response.data.message);
         // Clear the cart
         setCart([]);
@@ -225,6 +227,8 @@ function Page() {
           paymentMethod={paymentMethod}
           setPaymentId={setPaymentId}
           paymentId={paymentId}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
         />
       </div>
     </div>

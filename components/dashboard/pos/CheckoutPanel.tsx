@@ -12,15 +12,28 @@ import { Loader2, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface CheckoutPanelProps {
   cart: any;
   loader: boolean;
+  openModal: boolean;
   setCart: any;
   totalDiscount: number;
   finalTotal: number;
   taxPayable: number;
   setPaymentId: any;
+  setOpenModal: any;
   paymentMethod: string;
   paymentId: string;
   totalBeforeDiscount: number;
@@ -219,20 +232,41 @@ function CheckoutPanel(props: CheckoutPanelProps) {
           />
         </div>
       )}
-      <Button
-        disabled={props.loader}
-        onClick={props.makePayment}
-        className="w-full"
-      >
-        {props.loader ? (
-          <div className="flex justify-center items-center">
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Please wait
-          </div>
-        ) : (
-          "Pay"
-        )}
-      </Button>
+
+      <AlertDialog open={props.openModal} onOpenChange={props.setOpenModal}>
+        <AlertDialogTrigger asChild>
+          <Button onClick={() => props.setOpenModal(true)} className="w-full">
+            Pay
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure you want to confirm payment?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>No</AlertDialogCancel>
+            <Button
+              disabled={props.loader}
+              onClick={props.makePayment}
+              className=""
+            >
+              {props.loader ? (
+                <div className="flex justify-center items-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </div>
+              ) : (
+                "Yes"
+              )}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
