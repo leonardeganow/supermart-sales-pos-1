@@ -9,9 +9,6 @@ export async function PUT(request: Request) {
   try {
     const data = await request.json();
 
-
-    const imageUrl = await uploadToCloudinary(data.imageBase64);
-
     const currentUser = await getCurrentUser();
     if (currentUser) {
       const middlewareResponse = await checkAdminRole({ body: currentUser });
@@ -22,38 +19,33 @@ export async function PUT(request: Request) {
     const product = await ProductModel.findOne({ _id: data.productId });
 
     if (!product) {
-      return NextResponse.json(
-        { message: "product not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Product not found" });
     }
 
-    if (data.image.includes("https")) {
-      // Update the user details
-      if (data.name) product.name = data.name;
-      if (data.quantity) product.quantity = data.quantity;
-      if (data.category) product.category = product.category;
-      if (data.currency) product.currency = data.currency;
-      if (data.basePrice) product.basePrice = data.basePrice;
-      if (data.sellingPrice) product.sellingPrice = data.sellingPrice;
-      if (data.barcode) product.barcode = data.barcode;
-    } else {
-      // Update the user details
-      if (data.name) product.name = data.name;
-      if (data.quantity) product.quantity = data.quantity;
-      if (data.category) product.category = product.category;
-      if (data.currency) product.currency = product.currency;
-      if (data.basePrice) product.basePrice = data.basePrice;
-      if (data.sellingPrice) product.sellingPrice = data.sellingPrice;
-      if (data.barcode) product.barcode = data.barcode;
-      if (data.image) product.image = imageUrl;
+    // Update image if it's not an existing URL
+    if (!data.image.includes("https") && data.imageBase64) {
+      const imageUrl = await uploadToCloudinary(data.imageBase64);
+      product.image = imageUrl;
     }
+
+    // Update other product fields
+    if (data.name) product.name = data.name;
+    //update instock boolean if product quantity is greater than 0
+    if (data.quantity !== undefined) {
+      product.quantity = data.quantity;
+      product.inStock = data.quantity > 0;
+    }
+    if (data.category) product.category = data.category;
+    if (data.currency) product.currency = data.currency;
+    if (data.basePrice) product.basePrice = data.basePrice;
+    if (data.sellingPrice) product.sellingPrice = data.sellingPrice;
+    if (data.barcode) product.barcode = data.barcode;
 
     await product.save();
 
     return NextResponse.json(
       {
-        message: "product updated successfully",
+        message: "Product updated successfully",
         status: true,
       },
       { status: 200 }

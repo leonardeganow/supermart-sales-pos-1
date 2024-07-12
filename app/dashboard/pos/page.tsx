@@ -157,6 +157,7 @@ function Page() {
     try {
       setLoader(true);
       const response = await axios.post("/api/createorder", data);
+
       if (response.data.status) {
         setLoader(false);
         setOpenModal(false);
@@ -172,10 +173,14 @@ function Page() {
         setFinalTotal(0);
         setTaxPayable(0);
         setPaymentMethod("cash");
+      } else {
+        setLoader(false);
+        setOpenModal(false);
+        toast.error(response.data.message);
       }
     } catch (error) {
       setLoader(false);
-
+      setOpenModal(false);
       console.error(error);
       toast.error("An unexpected error occurred. Please try again.");
     }
