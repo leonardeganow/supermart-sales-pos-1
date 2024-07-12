@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 };
 async function DashboardLayout({ children }: MyComponentProps) {
   const user: CurrentUser = await getCurrentUser();
-  console.log(user);
   
   return (
     <div className="flex">

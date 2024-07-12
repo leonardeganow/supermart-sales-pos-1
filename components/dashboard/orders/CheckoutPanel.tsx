@@ -8,23 +8,39 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Minus, Plus } from "lucide-react";
+import { Loader2, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
 interface CheckoutPanelProps {
   cart: any;
+  loader: boolean;
   setCart: any;
   totalDiscount: number;
   finalTotal: number;
   taxPayable: number;
+  paymentMethod: string;
   totalBeforeDiscount: number;
   setTaxRate: any;
   makePayment: () => void;
   setPaymentMethod: (param: string) => void;
 }
 function CheckoutPanel(props: CheckoutPanelProps) {
+  const paymentMethods = [
+    {
+      id: 1,
+      value: "cash",
+    },
+    {
+      id: 2,
+      value: "mobile money",
+    },
+    {
+      id: 3,
+      value: "credit card",
+    },
+  ];
   return (
     <div className="lg:col-span-3 md:col-span-6  sm:block sm:border-l border-gray-300 dark:border-gray-700 p-4">
       <h1 className="font-semibold">Order checkout</h1>
@@ -168,20 +184,50 @@ function CheckoutPanel(props: CheckoutPanelProps) {
         </div>
       </div>
       <ToggleGroup variant="outline" type="single" className="my-4">
-        <ToggleGroupItem value="bold" aria-label="Toggle bold">
-          <p onClick={() => props.setPaymentMethod("cash")}>Cash</p>
-        </ToggleGroupItem>
-        <ToggleGroupItem value="italic" aria-label="Toggle italic">
-          <p onClick={() => props.setPaymentMethod("mobile money")}>Momo</p>
-        </ToggleGroupItem>
-        <ToggleGroupItem value="underline" aria-label="Toggle underline">
-          <p onClick={() => props.setPaymentMethod("credit card")}>
-            Credit card
-          </p>
-        </ToggleGroupItem>
+        {paymentMethods.map((paymentMethod) => {
+          return (
+            <div
+              onClick={() => props.setPaymentMethod(paymentMethod.value)}
+              key={paymentMethod.id}
+              aria-label="Toggle payment method"
+              className={`${
+                paymentMethod.value === props.paymentMethod
+                  ? "bg-green-500 text-white border-0 "
+                  : "border p-2 rounded"
+              } border p-2 rounded cursor-pointer hover:bg-green-500 hover:text-white`}
+            >
+              {paymentMethod.value === "mobile money"
+                ? "momo"
+                : paymentMethod.value}
+            </div>
+          );
+        })}
       </ToggleGroup>
-      <Button onClick={props.makePayment} className="w-full">
-        Pay
+      {props.paymentMethod !== "cash" && (
+        <div className="mb-4">
+          <Input
+            id={`paymentId`}
+            type="number"
+            placeholder="enter payment id"
+            className=""
+            value={""}
+            onChange={(e) => {}}
+          />
+        </div>
+      )}
+      <Button
+        disabled={props.loader}
+        onClick={props.makePayment}
+        className="w-full"
+      >
+        {props.loader ? (
+          <div className="flex justify-center items-center">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </div>
+        ) : (
+          "Pay"
+        )}
       </Button>
     </div>
   );

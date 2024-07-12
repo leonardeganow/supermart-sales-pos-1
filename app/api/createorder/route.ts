@@ -7,9 +7,35 @@ export async function POST(request: any) {
   try {
     const data = await request.json();
 
+    console.log(data);
+
     const user = await getCurrentUser();
 
     await connectToDatabase();
+
+    if (data.paymentMethod !== "cash") {
+      const newOrder = new OrderModel({
+        customerName: data.customerName,
+        paymentMethod: data.paymentMethod,
+        paymentMethodId: data.paymentMethodId,
+        taxAmount: data.taxAmount,
+        totalDiscount: data.totalDiscount,
+        finalTotal: data.finalTotal,
+        cashierId: user.id,
+        cart: data.cart,
+        orderStatus: "success",
+      });
+
+      await newOrder.save();
+
+      return NextResponse.json(
+        {
+          message: "order created successfuly",
+          status: true,
+        },
+        { status: 200 }
+      );
+    }
 
     const newOrder = new OrderModel({
       customerName: data.customerName,

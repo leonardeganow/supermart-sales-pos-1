@@ -18,6 +18,7 @@ import { toast } from "sonner";
 
 function Page() {
   const [keyword, setKeyword] = useState<string>("");
+  const [paymentId, setPaymentId] = useState<string>("");
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState<number>(0);
   const [totalBeforeDiscount, setTotalBeforeDiscount] = useState<number>(0);
@@ -25,7 +26,8 @@ function Page() {
   const [totalDiscount, setTotalDiscount] = useState<number>(0);
   const [finalTotal, setFinalTotal] = useState<number>(0);
   const [taxPayable, setTaxPayable] = useState<number>(0);
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("cash");
+  const [loader, setLoader] = useState<boolean>(false);
 
   const searchProducts = async () => {
     const data = { keyword: keyword };
@@ -121,7 +123,6 @@ function Page() {
     // Iterate through the cart array and create a new array with modified objects
     const modifiedCart = cart.map((item: any) => ({
       productId: item._id,
-      // Add any other keys you want to keep here
       quantity: item.quantity,
       currency: item.currency,
       total: item.totalPrice,
@@ -135,11 +136,12 @@ function Page() {
       totalDiscount,
       finalTotal: finalTotal,
     };
-    try {
-      // console.log(data);
 
+    try {
+      setLoader(true);
       const response = await axios.post("/api/createorder", data);
       if (response.data.status) {
+        setLoader(false);
         toast(response.data.message);
         // Clear the cart
         setCart([]);
@@ -153,6 +155,8 @@ function Page() {
         setPaymentMethod("");
       }
     } catch (error) {
+      setLoader(false);
+
       console.error(error);
       toast("An unexpected error occurred. Please try again.");
     }
@@ -198,6 +202,7 @@ function Page() {
         <CheckoutPanel
           cart={cart}
           totalDiscount={totalDiscount}
+          loader={loader}
           finalTotal={finalTotal}
           taxPayable={taxPayable}
           totalBeforeDiscount={totalBeforeDiscount}
@@ -205,6 +210,7 @@ function Page() {
           setTaxRate={setTaxRate}
           makePayment={makePayment}
           setPaymentMethod={setPaymentMethod}
+          paymentMethod={paymentMethod}
         />
       </div>
     </div>

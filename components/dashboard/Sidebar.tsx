@@ -36,8 +36,8 @@ export const navItems = [
     roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER], // Only admin can see this
   },
   {
-    label: "Orders",
-    path: "/dashboard/orders",
+    label: "Pos",
+    path: "/dashboard/pos",
     icon: <AiOutlineShoppingCart size={20} />,
     roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER], // Both admin and user can see this
   },

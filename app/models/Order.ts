@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const OrderSchema = new mongoose.Schema({
   customerName: { type: String, default: "guest" },
   paymentMethod: { type: String, required: true },
+  paymentId: { type: String, required: false },
   taxAmount: { type: Number, required: true },
   cart: [
     {
