@@ -23,6 +23,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import Receipt from "@/components/receipt/Receipt";
 
 interface CheckoutPanelProps {
   cart: any;
@@ -234,11 +236,22 @@ function CheckoutPanel(props: CheckoutPanelProps) {
       )}
 
       <AlertDialog open={props.openModal} onOpenChange={props.setOpenModal}>
-        <AlertDialogTrigger asChild>
-          <Button onClick={() => props.setOpenModal(true)} className="w-full">
-            Pay
-          </Button>
-        </AlertDialogTrigger>
+        <Button
+          onClick={() => {
+            if (props.cart.length <= 0) {
+              toast.info("Cart is empty. Please add products to proceed.");
+              return;
+            }
+            if (props.paymentMethod !== "cash" && !props.paymentId) {
+              toast.info("please enter a payment Id");
+              return;
+            }
+            props.setOpenModal(true);
+          }}
+          className="w-full"
+        >
+          Pay
+        </Button>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>

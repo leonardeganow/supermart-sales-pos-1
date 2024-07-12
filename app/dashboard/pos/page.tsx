@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CiBarcode } from "react-icons/ci";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 
@@ -15,10 +15,11 @@ import CheckoutPanel from "@/components/dashboard/pos/CheckoutPanel";
 import OrderCategoryCarousel from "@/components/dashboard/pos/OrderCategoryCarousel";
 import { addToCart } from "@/app/helpers";
 import { toast } from "sonner";
+import { useReactToPrint } from "react-to-print";
 
 function Page() {
   const [keyword, setKeyword] = useState<string>("");
-  const [paymentId, setPaymentId] = useState<string>(" ");
+  const [paymentId, setPaymentId] = useState<string>("");
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState<number>(0);
   const [totalBeforeDiscount, setTotalBeforeDiscount] = useState<number>(0);
@@ -29,6 +30,12 @@ function Page() {
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
   const [loader, setLoader] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const componentRef: any = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   const searchProducts = async () => {
     const data = { keyword: keyword };
@@ -120,17 +127,15 @@ function Page() {
     setFinalTotal(finalAmount);
   };
 
-  const makePayment = async () => {
-    console.log(paymentId);
+  // <Receipt
+  //   cart={props.cart}
+  //   totalBeforeDiscount={props.totalBeforeDiscount}
+  //   totalDiscount={props.totalDiscount}
+  //   taxPayable={props.taxPayable}
+  //   finalTotal={props.finalTotal}
+  // />;
 
-    if (cart.length <= 0) {
-      toast.info("Cart is empty. Please add products to proceed.");
-      return;
-    }
-    if (paymentMethod !== "cash" && !paymentId) {
-      toast.info("please enter a payment Id");
-      return;
-    }
+  const makePayment = async () => {
     // Iterate through the cart array and create a new array with modified objects
     const modifiedCart = cart.map((item: any) => ({
       productId: item._id,
