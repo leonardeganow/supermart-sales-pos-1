@@ -11,14 +11,14 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import CheckoutPanel from "@/components/dashboard/orders/CheckoutPanel";
-import OrderCategoryCarousel from "@/components/dashboard/orders/OrderCategoryCarousel";
+import CheckoutPanel from "@/components/dashboard/pos/CheckoutPanel";
+import OrderCategoryCarousel from "@/components/dashboard/pos/OrderCategoryCarousel";
 import { addToCart } from "@/app/helpers";
 import { toast } from "sonner";
 
 function Page() {
   const [keyword, setKeyword] = useState<string>("");
-  const [paymentId, setPaymentId] = useState<string>("");
+  const [paymentId, setPaymentId] = useState<string>(" ");
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState<number>(0);
   const [totalBeforeDiscount, setTotalBeforeDiscount] = useState<number>(0);
@@ -120,6 +120,16 @@ function Page() {
   };
 
   const makePayment = async () => {
+    console.log(paymentId);
+
+    if (cart.length <= 0) {
+      toast.info("Cart is empty. Please add products to proceed.");
+      return;
+    }
+    if (paymentMethod !== "cash" && !paymentId) {
+      toast.info("please enter a payment Id");
+      return;
+    }
     // Iterate through the cart array and create a new array with modified objects
     const modifiedCart = cart.map((item: any) => ({
       productId: item._id,
@@ -135,6 +145,7 @@ function Page() {
       cart: modifiedCart,
       totalDiscount,
       finalTotal: finalTotal,
+      paymentId: paymentId,
     };
 
     try {
@@ -142,7 +153,7 @@ function Page() {
       const response = await axios.post("/api/createorder", data);
       if (response.data.status) {
         setLoader(false);
-        toast(response.data.message);
+        toast.success(response.data.message);
         // Clear the cart
         setCart([]);
         // Reset the totals
@@ -150,15 +161,16 @@ function Page() {
         setTotalBeforeDiscount(0);
         setTaxRate(0);
         setTotalDiscount(0);
+        setPaymentId("");
         setFinalTotal(0);
         setTaxPayable(0);
-        setPaymentMethod("");
+        setPaymentMethod("cash");
       }
     } catch (error) {
       setLoader(false);
 
       console.error(error);
-      toast("An unexpected error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -211,6 +223,8 @@ function Page() {
           makePayment={makePayment}
           setPaymentMethod={setPaymentMethod}
           paymentMethod={paymentMethod}
+          setPaymentId={setPaymentId}
+          paymentId={paymentId}
         />
       </div>
     </div>

@@ -22,13 +22,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
 import defaultValues from "./defaultValues";
 import formSchema from "./validationSchema";
+import { toast } from "sonner";
 
 function UsersForm(props: UserFormProps) {
   const [loader, setLoader] = React.useState(false);
-  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,9 +48,9 @@ function UsersForm(props: UserFormProps) {
           props.setShowModal(false);
           form.reset();
           form.setValue("role", "");
-          toast({ description: response.data.message });
+          toast.success(response.data.message);
         } else {
-          toast({ description: response.data.message });
+          toast.error(response.data.message);
         }
       } catch (error) {
         console.error(error);
@@ -71,16 +70,14 @@ function UsersForm(props: UserFormProps) {
           props.setShowModal(false);
           props.refetch();
           form.reset();
-          toast({ description: response.data.message });
+          toast.success(response.data.message);
         } else {
-          toast({ description: response.data.message });
+          toast.error(response.data.message);
         }
       } catch (error) {
         console.error(error);
       }
     }
-
-
   };
 
   const deleteUser = async () => {
@@ -97,10 +94,10 @@ function UsersForm(props: UserFormProps) {
           setLoader(false);
           props.setShowModal(false);
           props.refetch();
-          toast({ description: response.data.message });
+          toast.success(response.data.message);
         } else {
           setLoader(false);
-          toast({ description: response.data.message });
+          toast.error(response.data.message);
         }
       } catch (error) {
         setLoader(false);
@@ -110,7 +107,7 @@ function UsersForm(props: UserFormProps) {
   };
 
   useEffect(() => {
-    if (props.type==="edit") {
+    if (props.type === "edit") {
       form.setValue("name", props.userData.name);
       form.setValue("phone", props.userData.phone);
       form.setValue("email", props.userData.email);

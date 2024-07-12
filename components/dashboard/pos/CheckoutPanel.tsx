@@ -20,7 +20,9 @@ interface CheckoutPanelProps {
   totalDiscount: number;
   finalTotal: number;
   taxPayable: number;
+  setPaymentId: any;
   paymentMethod: string;
+  paymentId: string;
   totalBeforeDiscount: number;
   setTaxRate: any;
   makePayment: () => void;
@@ -207,11 +209,13 @@ function CheckoutPanel(props: CheckoutPanelProps) {
         <div className="mb-4">
           <Input
             id={`paymentId`}
-            type="number"
+            type="text"
             placeholder="enter payment id"
             className=""
-            value={""}
-            onChange={(e) => {}}
+            value={props.paymentId}
+            onChange={(e) => {
+              props.setPaymentId(e.target.value);
+            }}
           />
         </div>
       )}

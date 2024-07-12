@@ -7,8 +7,6 @@ export async function POST(request: any) {
   try {
     const data = await request.json();
 
-    console.log(data);
-
     const user = await getCurrentUser();
 
     await connectToDatabase();
@@ -17,7 +15,7 @@ export async function POST(request: any) {
       const newOrder = new OrderModel({
         customerName: data.customerName,
         paymentMethod: data.paymentMethod,
-        paymentMethodId: data.paymentMethodId,
+        paymentId: data.paymentId,
         taxAmount: data.taxAmount,
         totalDiscount: data.totalDiscount,
         finalTotal: data.finalTotal,

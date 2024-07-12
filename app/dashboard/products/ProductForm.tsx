@@ -24,8 +24,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { convertImageToBase64 } from "@/app/utils";
 import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export const supermarketCategories = [
   "Fruits and Vegetables",
@@ -50,7 +50,6 @@ export const supermarketCategories = [
   "Miscellaneous",
 ];
 function ProductForm(props: UserFormProps) {
-  const { toast } = useToast();
   const [base64Image, setBase64Image] = useState();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -76,9 +75,9 @@ function ProductForm(props: UserFormProps) {
           props.setShowModal(false);
           form.reset();
           form.setValue("category", "");
-          toast({ description: response.data.message });
+          toast.success(response.data.message);
         } else {
-          toast({ description: response.data.message });
+          toast.error(response.data.message);
         }
       } catch (error) {
         console.log(error);
@@ -100,9 +99,9 @@ function ProductForm(props: UserFormProps) {
           props.setShowModal(false);
           props.refetch();
           form.reset();
-          toast({ description: response.data.message });
+          toast.success(response.data.message);
         } else {
-          toast({ description: response.data.message });
+          toast.error(response.data.message);
         }
       } catch (error) {
         console.error(error);
@@ -124,10 +123,10 @@ function ProductForm(props: UserFormProps) {
           setLoader(false);
           props.setShowModal(false);
           props.refetch();
-          toast({ description: response.data.message });
+          toast.success(response.data.message);
         } else {
           setLoader(false);
-          toast({ description: response.data.message });
+          toast.error(response.data.message);
         }
       } catch (error) {
         setLoader(false);
@@ -137,7 +136,6 @@ function ProductForm(props: UserFormProps) {
   };
 
   console.log(props.userData);
-  
 
   useEffect(() => {
     if (props.type === "edit") {
