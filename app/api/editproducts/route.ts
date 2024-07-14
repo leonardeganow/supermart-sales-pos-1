@@ -5,6 +5,8 @@ import { checkAdminRole } from "@/app/middlewares/authMiddleware";
 import ProductModel from "@/app/models/Products";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function PUT(request: Request) {
   try {
     const data = await request.json();

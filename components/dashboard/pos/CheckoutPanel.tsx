@@ -140,7 +140,7 @@ function CheckoutPanel(props: CheckoutPanelProps) {
                   </div>
                   <p className="font-semibold">
                     {product.currency === "GHS" ? "₵" : "$"}
-                    {product.totalPrice}
+                    {product.totalPrice.toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -185,8 +185,8 @@ function CheckoutPanel(props: CheckoutPanelProps) {
         {props.taxPayable !== 0 && (
           <div className="flex justify-between items-center">
             <p className="font-semibold">Tax</p>
-            <p className="text-red-500">
-              -{props.taxPayable.toFixed(2)}{" "}
+            <p className="">
+              +{props.taxPayable.toFixed(2)}{" "}
               {props.cart.length > 0 && props.cart[0].currency}
             </p>
           </div>

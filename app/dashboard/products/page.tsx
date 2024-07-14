@@ -24,7 +24,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 function Page() {
   const [type, setType] = React.useState("");
   const [userData, setUserData] = React.useState();
@@ -36,6 +35,7 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
+            className=" p-0"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -55,6 +55,7 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
+            className=" p-0"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -72,6 +73,7 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
+            className=" p-0"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -99,6 +101,7 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
+            className=" p-0"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -116,6 +119,7 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
+            className=" p-0"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -133,6 +137,7 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
+            className=" p-0"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -150,6 +155,7 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
+            className=" p-0"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
@@ -175,6 +181,7 @@ function Page() {
       header: ({ column }) => {
         return (
           <Button
+            className=" p-0"
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
