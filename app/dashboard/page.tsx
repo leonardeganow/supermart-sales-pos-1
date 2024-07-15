@@ -184,7 +184,7 @@ function Page() {
 
       <div className="grid sm:grid-cols-2 gap-5 mt-6">
         <div>
-          <DashboardAreaChart />
+          <DashboardAreaChart chartData={data?.chartData} />
         </div>
         <DashboardPieChart />
       </div>

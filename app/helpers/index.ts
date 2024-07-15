@@ -100,3 +100,35 @@ export const setDiscount = (
 export const removeFromCart = (id: string, setterstate: () => void) => {
   setterstate((prev) => prev.filter((item) => item._id !== id));
 };
+
+//NOTE - function to get last 6 months
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+export function getLastSixMonths() {
+  const months = [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  for (let i = 5; i >= 0; i--) {
+    const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    months.push({
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      monthName: monthNames[date.getMonth()],
+    });
+  }
+  return months;
+}

@@ -1,5 +1,6 @@
 "use server";
 
+import { getLastSixMonths } from "../helpers";
 import connectToDatabase from "../libs/mongodb";
 import OrderModel from "../models/Order";
 import ProductModel from "../models/Products";
@@ -81,7 +82,60 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
       orderDate: { $gte: start, $lte: end },
     });
 
-    return { totalQuantity, totalOrders, totalRevenue, totalProfit };
+    // Calculate sales count for each of the past 6 months
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+    sixMonthsAgo.setHours(0, 0, 0, 0);
+
+    const monthlySales = await OrderModel.aggregate([
+      {
+        $match: {
+          orderDate: { $gte: sixMonthsAgo },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$orderDate" },
+            month: { $month: "$orderDate" },
+          },
+          salesCount: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          "_id.year": 1,
+          "_id.month": 1,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          year: "$_id.year",
+          month: "$_id.month",
+          salesCount: 1,
+        },
+      },
+    ]);
+
+    const lastSixMonths = getLastSixMonths();
+    const chartData = lastSixMonths.map((month) => {
+      const salesData = monthlySales.find(
+        (data) => data.year === month.year && data.month === month.month
+      );
+      return {
+        month: month.monthName,
+        sales: salesData ? salesData.salesCount : 0,
+      };
+    });
+
+    return {
+      totalQuantity,
+      totalOrders,
+      totalRevenue,
+      totalProfit,
+      chartData,
+    };
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
     return {
@@ -89,6 +143,7 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
       totalOrders: 0,
       totalRevenue: 0,
       totalProfit: 0,
+      chartData: 0,
     };
   }
 }
