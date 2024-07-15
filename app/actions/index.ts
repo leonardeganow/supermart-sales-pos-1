@@ -12,6 +12,9 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
     const start = new Date(startDate);
     const end = new Date(new Date(endDate).setHours(23, 59, 59, 999));
 
+    const month = start.getMonth();
+    console.log(month);
+
     // Aggregate total stock quantity
     const totalStock = await ProductModel.aggregate([
       {
@@ -129,12 +132,65 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
       };
     });
 
+    const paymentMethods = await OrderModel.aggregate([
+      {
+        $group: {
+          _id: {
+            month: {
+              $month: "$orderDate",
+            },
+            year: {
+              $year: "$orderDate",
+            },
+            paymentMethod: "$paymentMethod",
+          },
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: "$_id.month",
+            year: "$_id.year",
+          },
+          paymentMethods: {
+            $push: {
+              type: "$_id.paymentMethod",
+              count: "$count",
+              fill: "",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          month: "$_id.month",
+          year: "$_id.year",
+          paymentMethods: 1,
+        },
+      },
+      {
+        $sort: {
+          year: 1,
+          month: 1,
+        },
+      },
+    ]);
+
+    const paymentMethodsCount = paymentMethods[0];
+
+    console.log(paymentMethodsCount);
+
     return {
       totalQuantity,
       totalOrders,
       totalRevenue,
       totalProfit,
       chartData,
+      paymentMethodsCount,
     };
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
