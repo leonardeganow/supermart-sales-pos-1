@@ -13,7 +13,6 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
     const end = new Date(new Date(endDate).setHours(23, 59, 59, 999));
 
     const month = start.getMonth();
-    console.log(month);
 
     // Aggregate total stock quantity
     const totalStock = await ProductModel.aggregate([

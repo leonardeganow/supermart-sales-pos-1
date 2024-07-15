@@ -13,14 +13,32 @@ import { DashboardPieChart } from "@/components/dashboard/Piechart";
 import { DashboardTable } from "@/components/dashboard/DashboardTable";
 import { fetchDashboardData } from "../actions";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
+import { Loader2, SearchIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { addDays } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 function Page() {
   const [selectedPeriod, setSelectedPeriod] = useState("today");
+  const [rangePickerDate, setRangePickerDate] = React.useState<
+    DateRange | undefined
+  >({
+    from: new Date(2022, 0, 20),
+    to: addDays(new Date(2022, 0, 20), 20),
+  });
+
   const [dateRange, setDateRange] = useState({
     startDate: new Date().toISOString().split("T")[0],
     endDate: new Date().toISOString().split("T")[0],
   });
+
+  console.log(rangePickerDate);
+  const onSubmit = () => {
+    setDateRange({
+      startDate: rangePickerDate.from,
+      endDate: rangePickerDate.to,
+    });
+  };
 
   const handleDateChange = (startDate: string, endDate: string) => {
     setDateRange({ startDate, endDate });
@@ -129,7 +147,7 @@ function Page() {
             <div>
               {widget.currency ? (
                 <h1 className="text-xl font-bold">
-                  {widget.currency === "Ghs" ? "₵" : ""}
+                  +{widget.currency === "Ghs" ? "₵" : ""}
                   {widget.value
                     ? new Intl.NumberFormat().format(widget.value)
                     : 0}
@@ -176,7 +194,13 @@ function Page() {
               <SelectItem value="6months">6 Months</SelectItem>
             </SelectContent>
           </Select>
-          <DatePickerWithRange />
+          <DatePickerWithRange
+            rangePickerDate={rangePickerDate}
+            setRangePickerDate={setRangePickerDate}
+          />
+          <Button onClick={onSubmit} variant="outline" size="icon">
+            <SearchIcon />
+          </Button>
         </div>
       </div>
 
