@@ -1,19 +1,15 @@
-import React, { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
+import React from "react";
 
 function Receipt(props: any) {
-  const componentRef: any = useRef();
-
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
-
   return (
-    <div ref={componentRef} className="grid h-screen place-items-center">
+    <div
+      ref={props.componentRef}
+      className="grid min-h-[30dvh] place-items-center "
+    >
       <div className="mt-4 p-4 bg-white rounded-lg shadow-lg">
         <h2 className="text-xl font-bold text-center">Supermarket</h2>
         <div className="flex flex-col items-center">
-          <p>Date: {new Date().toLocaleString()}</p>
+          {/* <p>Date: {new Date().toLocaleString()}</p> */}
           <p>Location: Accra</p>
           <p>Tel: 0302451236</p>
         </div>
@@ -53,7 +49,7 @@ function Receipt(props: any) {
         </div>
       </div>
 
-      <button onClick={handlePrint}>Print</button>
+      {/* <button onClick={handlePrint}>Print</button> */}
     </div>
   );
 }

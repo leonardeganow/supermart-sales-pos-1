@@ -16,9 +16,19 @@ import OrderCategoryCarousel from "@/components/dashboard/pos/OrderCategoryCarou
 import { addToCart } from "@/app/helpers";
 import { toast } from "sonner";
 import { useReactToPrint } from "react-to-print";
+import Receipt from "@/components/receipt/Receipt";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 function Page() {
-  const [keyword, setKeyword] = useState<string>("");
+  const [keyword, setKeyword] = useState("");
   const [paymentId, setPaymentId] = useState<string>("");
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState<number>(0);
@@ -30,6 +40,7 @@ function Page() {
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
   const [loader, setLoader] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [printModal, setPrintModal] = useState<boolean>(false);
 
   const componentRef: any = useRef();
 
@@ -43,6 +54,9 @@ function Page() {
       const response = await axios.post("/api/searchproducts", data);
       if (response.data.status) {
         return response.data.products;
+      } else {
+        // console.log(response);
+        return response.data.message;
       }
     } catch (error) {
       console.error(error);
@@ -71,7 +85,7 @@ function Page() {
       return <div>Error fetching products: {error.message}</div>;
     }
 
-    if (data && data.length > 0) {
+    if (Array.isArray(data) && data.length > 0) {
       return data.map((product: any) => (
         <Card key={product._id} className="flex p-2 gap-x-4">
           <div>
@@ -103,6 +117,12 @@ function Page() {
       ));
     }
 
+    if (typeof data === "string") {
+      return (
+        <h1 className="text-center w-full col-span-4">search for a product </h1>
+      );
+    }
+
     return <h1>No products found</h1>;
   };
 
@@ -126,14 +146,6 @@ function Page() {
     setTotalDiscount(totalDiscountAmount);
     setFinalTotal(finalAmount);
   };
-
-  // <Receipt
-  //   cart={props.cart}
-  //   totalBeforeDiscount={props.totalBeforeDiscount}
-  //   totalDiscount={props.totalDiscount}
-  //   taxPayable={props.taxPayable}
-  //   finalTotal={props.finalTotal}
-  // />;
 
   const makePayment = async () => {
     // Iterate through the cart array and create a new array with modified objects
@@ -159,20 +171,11 @@ function Page() {
       const response = await axios.post("/api/createorder", data);
 
       if (response.data.status) {
+        setPrintModal(true);
         setLoader(false);
         setOpenModal(false);
         toast.success(response.data.message);
         // Clear the cart
-        setCart([]);
-        // Reset the totals
-        setTotal(0);
-        setTotalBeforeDiscount(0);
-        setTaxRate(0);
-        setTotalDiscount(0);
-        setPaymentId("");
-        setFinalTotal(0);
-        setTaxPayable(0);
-        setPaymentMethod("cash");
       } else {
         setLoader(false);
         setOpenModal(false);
@@ -240,6 +243,40 @@ function Page() {
           openModal={openModal}
           setOpenModal={setOpenModal}
         />
+
+        <AlertDialog open={printModal} onOpenChange={setPrintModal}>
+          <AlertDialogContent>
+            <Receipt
+              cart={cart}
+              componentRef={componentRef}
+              totalBeforeDiscount={totalBeforeDiscount}
+              totalDiscount={totalDiscount}
+              taxPayable={taxPayable}
+              finalTotal={finalTotal}
+            />
+            <AlertDialogFooter>
+              <Button onClick={handlePrint}>click to print</Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setPrintModal(false);
+                  setCart([]);
+                  // Reset the totals
+                  setTotal(0);
+                  setTotalBeforeDiscount(0);
+                  setTaxRate(0);
+                  setTotalDiscount(0);
+                  setPaymentId("");
+                  setFinalTotal(0);
+                  setTaxPayable(0);
+                  setPaymentMethod("cash");
+                }}
+              >
+                close order
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

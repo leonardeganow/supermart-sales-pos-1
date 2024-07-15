@@ -9,10 +9,16 @@ export async function POST(request: Request) {
     const { keyword } = await request.json();
 
     await connectToDatabase();
+    // console.log(keyword);
+    if (!keyword) {
+      return NextResponse.json({
+        message: "search for a product",
+        status: false,
+      });
+    }
 
     // Search for products by keyword
-
-    if (keyword) {
+    if (keyword !== "All Products") {
       const products = await ProductModel.find({
         $or: [
           { name: { $regex: keyword, $options: "i" } },
@@ -29,17 +35,16 @@ export async function POST(request: Request) {
         { status: 200 }
       );
     }
-    const products = await ProductModel.find();
-    return NextResponse.json(
-      {
-        message: "Products fetched successfully",
+
+    if (keyword === "All Products") {
+      const products = await ProductModel.find();
+      return NextResponse.json({
+        message: "all products",
         products,
         status: true,
-      },
-      { status: 200 }
-    );
+      });
+    }
   } catch (error: any) {
-    console.error("Error fetching users:", error);
     return NextResponse.json(
       {
         message: "Internal Server Error",

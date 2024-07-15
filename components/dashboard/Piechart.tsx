@@ -19,27 +19,25 @@ import {
 } from "@/components/ui/chart";
 
 export function DashboardPieChart(props: any) {
-  const chartData = [
-    {
-      type: "Card",
-      count: props.chartData.paymentMethods[0].count,
-      fill: "var(--color-Card)",
-    },
-    {
-      type: "Momo",
-      count: props.chartData.paymentMethods[1].count,
-      fill: "var(--color-Momo)",
-    },
-    {
-      type: "Cash",
-      count: props.chartData.paymentMethods[2].count,
-      fill: "var(--color-Cash)",
-    },
-  ];
+  const data = props?.chartData?.paymentMethods.map(
+    (item: { type: string; count: Number }) => {
+      const name =
+        item.type === "mobile money"
+          ? "Momo"
+          : item.type === "credit card"
+          ? "Card"
+          : "Cash";
+      return {
+        fill: `var(--color-${name})`,
+        count: item.count,
+        type: name,
+      };
+    }
+  );
 
   const chartConfig = {
-    paymethod: {
-      label: "Paymethod",
+    count: {
+      label: "Count",
     },
     Card: {
       label: "card",
@@ -67,9 +65,9 @@ export function DashboardPieChart(props: any) {
         >
           <PieChart>
             <ChartTooltip
-              content={<ChartTooltipContent nameKey="paymethod" hideLabel />}
+              content={<ChartTooltipContent nameKey="count" hideLabel />}
             />
-            <Pie data={chartData} dataKey="count">
+            <Pie data={data} dataKey="count">
               <LabelList
                 dataKey="type"
                 className="fill-background"

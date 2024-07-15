@@ -159,7 +159,7 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
             $push: {
               type: "$_id.paymentMethod",
               count: "$count",
-              fill: "",
+              fill: "hsl(var(--chart-1))",
             },
           },
         },
@@ -181,8 +181,6 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
     ]);
 
     const paymentMethodsCount = paymentMethods[0];
-
-    console.log(paymentMethodsCount);
 
     return {
       totalQuantity,

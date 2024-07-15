@@ -11,8 +11,6 @@ interface DashboardHeaderProps {
   user: CurrentUser;
 }
 async function DashboardHeader(props: DashboardHeaderProps) {
-
-
   return (
     <div className="p-5 flex justify-between border items-center gap-x-8 h-[8dvh] ">
       <Sheet>
@@ -24,7 +22,7 @@ async function DashboardHeader(props: DashboardHeaderProps) {
           />
         </SheetTrigger>
         <SheetContent side="left">
-          <MobileMenu  user={props.user}/>
+          <MobileMenu user={props?.user} />
         </SheetContent>
       </Sheet>
 
@@ -32,13 +30,13 @@ async function DashboardHeader(props: DashboardHeaderProps) {
       <div className="flex items-center gap-x-5">
         {/* <LogoutButton /> */}
         <div className="sm:flex flex-col hidden">
-          <p className="capitalize">{props.user.name}</p>
+          <p className="capitalize">{props?.user?.name}</p>
           <p className="text-sm text-muted-foreground capitalize">
-            {props.user.role}
+            {props?.user?.role}
           </p>
         </div>
 
-        <AvatarDropdown user={props.user} />
+        <AvatarDropdown user={props?.user} />
       </div>
     </div>
   );

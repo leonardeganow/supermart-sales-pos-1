@@ -28,6 +28,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 
 export const supermarketCategories = [
+  "All Products",
   "Fruits and Vegetables",
   "Dairy Products",
   "Bakery",

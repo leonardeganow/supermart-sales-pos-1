@@ -14,6 +14,8 @@ function OrderCategoryCarousel(props: any) {
     <Carousel className="w-[250px] sm:w-full mx-auto sm:mx-0">
       <CarouselContent>
         {supermarketCategories.map((category) => {
+          // console.log(category);
+
           return (
             <CarouselItem key={category} className="basis-1/8">
               <Button
