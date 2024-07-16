@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
-import { createSupplier, deleteSupplier } from "@/app/actions";
+import { createSupplier, deleteSupplier, editSupplier } from "@/app/actions";
 
 function SupplierForm(props: UserFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,19 +49,19 @@ function SupplierForm(props: UserFormProps) {
     if (props.type === "edit") {
       try {
         const data = {
-          productId: props.userData._id,
+          supplierId: props.userData._id,
           ...values,
         };
 
-        const response = await axios.put("/api/editproducts", data);
+        const response: any = await editSupplier(data);
 
-        if (response.data.status) {
+        if (response.status) {
           props.setShowModal(false);
           props.refetch();
           form.reset();
-          toast.success(response.data.message);
+          toast.success(response.message);
         } else {
-          toast.error(response.data.message);
+          toast.error(response.message);
         }
       } catch (error) {
         console.error(error);

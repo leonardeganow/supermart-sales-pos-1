@@ -292,3 +292,39 @@ export async function deleteSupplier(params: { supplierId: string }) {
     };
   }
 }
+
+export async function editSupplier(params: any) {
+  try {
+    const currentUser = await getCurrentUser();
+    if (currentUser) {
+      const middlewareResponse = await checkAdminRole({ body: currentUser });
+      if (middlewareResponse) return middlewareResponse;
+    }
+
+    await connectToDatabase();
+    const supplier = await SupplierModel.findOne({ _id: params.supplierId });
+
+    if (!supplier) {
+      return { message: "Product not found" };
+    }
+
+    // Update other product fields
+    if (params.name) supplier.name = params.name;
+    if (params.location) supplier.location = params.location;
+    if (params.telephone) supplier.telephone = params.telephone;
+    if (params.product) supplier.product = params.product;
+
+    await supplier.save();
+
+    return {
+      message: "Supplier updated successfully",
+      status: true,
+    };
+  } catch (error: any) {
+    console.error("Error editing supplier:", error);
+    return {
+      message: "Internal Server Error",
+      error: error.message,
+    };
+  }
+}
