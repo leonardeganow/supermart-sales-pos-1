@@ -19,12 +19,8 @@ import { useReactToPrint } from "react-to-print";
 import Receipt from "@/components/receipt/Receipt";
 import {
   AlertDialog,
-  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 function Page() {
@@ -44,10 +40,12 @@ function Page() {
 
   const componentRef: any = useRef();
 
+  //this function prints order receipt
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
+  //this function searches for products and returns response
   const searchProducts = async () => {
     const data = { keyword: keyword };
     try {
@@ -69,11 +67,13 @@ function Page() {
     staleTime: 5000,
   });
 
+  //this function handles the keyword change
   const handleKeywordChange = (value: string) => {
     setKeyword(value);
     refetch();
   };
 
+  //function to render the search
   const renderProducts = () => {
     if (isFetching) {
       return [...Array(4)].map((_, index) => (
@@ -147,6 +147,7 @@ function Page() {
     setFinalTotal(finalAmount);
   };
 
+  //make payment function
   const makePayment = async () => {
     // Iterate through the cart array and create a new array with modified objects
     const modifiedCart = cart.map((item: any) => ({

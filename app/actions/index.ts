@@ -2,8 +2,11 @@
 
 import { getLastSixMonths } from "../helpers";
 import connectToDatabase from "../libs/mongodb";
+import { getCurrentUser } from "../libs/session";
+import { checkAdminRole } from "../middlewares/authMiddleware";
 import OrderModel from "../models/Order";
 import ProductModel from "../models/Products";
+import SupplierModel from "../models/Supplier";
 
 export async function fetchDashboardData(startDate: string, endDate: string) {
   try {
@@ -197,6 +200,95 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
       totalRevenue: 0,
       totalProfit: 0,
       chartData: 0,
+    };
+  }
+}
+
+export async function createSupplier(param: any) {
+  try {
+    console.log(param);
+
+    const user = await getCurrentUser();
+
+    await connectToDatabase();
+    const supplier = new SupplierModel({
+      name: param.name,
+      location: param.location,
+      telephone: param.telephone,
+      product: param.product,
+      createdBy: user.id,
+    });
+    supplier.save();
+
+    return {
+      message: "Supplier created successfully",
+      status: true,
+    };
+  } catch (error: any) {
+    console.error("Error creating supplier:", error);
+    return {
+      message: "Internal Server Error",
+      error: error.message,
+    };
+  }
+}
+
+export async function getSuppliers() {
+  try {
+    const currentUser = await getCurrentUser();
+
+    // Check if the requester is an admin
+    const middlewareResponse = await checkAdminRole({ body: currentUser });
+    if (middlewareResponse) return middlewareResponse;
+
+    await connectToDatabase();
+
+    // Fetch suppliers created by the admin
+    const suppliers = await SupplierModel.find({ createdBy: currentUser.id });
+
+    return {
+      message: "Users fetched successfully",
+      suppliers,
+      status: true,
+    };
+  } catch (error: any) {
+    console.error("Error fetching suppliers:", error);
+    return {
+      message: "Internal Server Error",
+      error: error.message,
+    };
+  }
+}
+
+export async function deleteSupplier(params: { supplierId: string }) {
+  try {
+    const currentUser = await getCurrentUser();
+    if (currentUser) {
+      const middlewareResponse = await checkAdminRole({ body: currentUser });
+      if (middlewareResponse) return middlewareResponse;
+    }
+
+    await connectToDatabase();
+
+    // Find and delete the user
+    const supplierToDelete = await SupplierModel.findById(params.supplierId);
+    if (!supplierToDelete) {
+      return {
+        message: "Supplier not found",
+        status: false,
+      };
+    }
+
+    await SupplierModel.findByIdAndDelete(params.supplierId);
+    return {
+      message: "Supplier deleted successfully",
+      status: true,
+    };
+  } catch (error: any) {
+    console.error("Error deleting supplier:", error);
+    return {
+      message: "Internal Server Error",
+      error: error.message,
     };
   }
 }

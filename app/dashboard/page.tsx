@@ -15,16 +15,12 @@ import { fetchDashboardData } from "../actions";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { addDays } from "date-fns";
-import { DateRange } from "react-day-picker";
 
 function Page() {
   const [selectedPeriod, setSelectedPeriod] = useState("today");
-  const [rangePickerDate, setRangePickerDate] = React.useState<
-    DateRange | undefined
-  >({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+  const [rangePickerDate, setRangePickerDate] = React.useState({
+    from: "",
+    to: "",
   });
 
   const [dateRange, setDateRange] = useState({
@@ -32,7 +28,6 @@ function Page() {
     endDate: new Date().toISOString().split("T")[0],
   });
 
-  console.log(rangePickerDate);
   const onSubmit = () => {
     setDateRange({
       startDate: rangePickerDate.from,
@@ -128,8 +123,6 @@ function Page() {
     },
   ];
 
-  console.log(data);
-
   const renderWidgets = () => {
     return dashWidgets.map((widget, i) => {
       return (
@@ -199,7 +192,11 @@ function Page() {
             setRangePickerDate={setRangePickerDate}
           />
           <Button onClick={onSubmit} variant="outline" size="icon">
-            <SearchIcon />
+            {isFetching ? (
+              <Loader2 className=" animate-spin" />
+            ) : (
+              <SearchIcon />
+            )}
           </Button>
         </div>
       </div>
