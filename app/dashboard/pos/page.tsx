@@ -37,6 +37,7 @@ function Page() {
   const [loader, setLoader] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [printModal, setPrintModal] = useState<boolean>(false);
+  const [receiptData, setReceiptData] = useState<any>({});
 
   const componentRef: any = useRef();
 
@@ -170,6 +171,18 @@ function Page() {
     try {
       setLoader(true);
       const response = await axios.post("/api/createorder", data);
+      setReceiptData((prev: any) => {
+        return {
+          ...prev,
+          orderId: response.data.order._id,
+          orderTime: response.data.order.orderDate,
+          paymentMethod: response.data.order.paymentMethod,
+          supermarketName: response.data.supermarketName,
+          supermarketLocation: response.data.supermarketLocation,
+          supermarketNumber: response.data.supermarketNumber,
+          cashierName: response.data.cashierName,
+        };
+      });
 
       if (response.data.status) {
         setPrintModal(true);
@@ -248,6 +261,7 @@ function Page() {
         <AlertDialog open={printModal} onOpenChange={setPrintModal}>
           <AlertDialogContent>
             <Receipt
+              receiptData={receiptData}
               cart={cart}
               componentRef={componentRef}
               totalBeforeDiscount={totalBeforeDiscount}

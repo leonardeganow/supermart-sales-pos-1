@@ -4,6 +4,8 @@ import OrderModel from "@/app/models/Order";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import ProductModel from "@/app/models/Products";
+import SupermartModel from "@/app/models/Supermarket";
+import UserModel from "@/app/models/User";
 
 export async function POST(request: any) {
   //this creates a transaction for the database connection
@@ -74,12 +76,22 @@ export async function POST(request: any) {
     await session.commitTransaction();
     session.endSession();
 
+    const superMarket = await UserModel.find({
+      _id: user.id,
+    }).populate("supermarketId");
+
     return NextResponse.json(
       {
         message: "Order created successfully",
         status: true,
+        order: newOrder,
+        supermarketName: superMarket[0].supermarketId.name,
+        supermarketLocation: superMarket[0].supermarketId.location,
+        supermarketNumber: superMarket[0].supermarketId.phone,
+        cashierName: superMarket[0].name,
       },
-      { status: 200 }
+      newOrder
+      // { status: 200 }
     );
   } catch (error: any) {
     await session.abortTransaction();

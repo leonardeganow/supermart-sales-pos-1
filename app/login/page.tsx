@@ -1,9 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { AlertCircle } from "lucide-react";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Form,
   FormControl,
@@ -15,11 +18,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import Logo from "@/components/header/Logo";
 import OnboardingRight from "@/components/OnboardingRight";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),
@@ -33,8 +36,8 @@ const defaultValues: z.infer<typeof formSchema> = {
 
 function Page() {
   const router = useRouter();
+  const [message, setMessage] = useState<String>();
 
-  const { toast } = useToast();
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -50,6 +53,7 @@ function Page() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setMessage("");
       const { username, password } = values;
       const response: any = await signIn("credentials", {
         redirect: false,
@@ -59,16 +63,13 @@ function Page() {
 
       if (!response.error) {
         router.push("/dashboard");
-      } else {
-        toast({
-          description: response.error,
-        });
+      }
+      if (response.status === 401) {
+        setMessage(response.error);
       }
     } catch (error) {
       console.error(error);
-      toast({
-        description: "An unexpected error occurred. Please try again.",
-      });
+      setMessage("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -84,6 +85,13 @@ function Page() {
     <div className="flex h-[100dvh] items-center justify-center gap-40">
       <div className="w-[80%] md:w-[50%] lg:w-[30%] border p-5 rounded-lg flex flex-col gap-y-5">
         <Logo route="/login" />
+        {message && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            {/* <AlertTitle>Error</AlertTitle> */}
+            <AlertDescription>{message}</AlertDescription>
+          </Alert>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField

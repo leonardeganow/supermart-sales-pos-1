@@ -76,7 +76,6 @@ function SupplierForm(props: UserFormProps) {
         const data: any = {
           supplierId: props.userData,
         };
-        console.log(data);
 
         const response: any = await deleteSupplier(data);
 
