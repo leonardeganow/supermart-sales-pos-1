@@ -383,8 +383,6 @@ export async function editAccountInfo(params: any) {
       },
     });
 
-    console.log(user);
-
     return {
       message: "Account info updated successfully",
       status: true,
@@ -426,5 +424,51 @@ export async function changePassword(params: any) {
   } catch (error) {
     console.error("Error changing password:", error);
     return { message: "Internal Server Error", status: false };
+  }
+}
+
+export async function generateReport(params: any) {
+  try {
+    const currentUser = await getCurrentUser();
+    if (currentUser) {
+      const middlewareResponse = await checkAdminRole({
+        body: currentUser,
+      });
+      if (middlewareResponse) return middlewareResponse;
+    }
+
+    await connectToDatabase();
+
+    const supermarketId = new mongoose.Types.ObjectId(
+      currentUser.supermarketId
+    );
+    const cashierId = new mongoose.Types.ObjectId(params.cashierId);
+
+    //query sales made by cashier  ove a period of time
+    const sales = await OrderModel.aggregate([
+      {
+        $match: {
+          supermarketId: supermarketId,
+          // cashierId: cashierId,
+          orderDate: {
+            $gte: params.startDate,
+            $lte: params.endDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalSales: {
+            $sum: "$finalTotal",
+          },
+        },
+      },
+    ]);
+
+    console.log(sales);
+  } catch (error) {
+    console.error("Error generating report:", error);
+    return { message: "Internal Server Error" };
   }
 }

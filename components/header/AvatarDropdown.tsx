@@ -11,6 +11,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import getInitials from "@/app/helpers";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 interface AvatarDropdownProps {
   user: CurrentUser;
@@ -27,8 +28,15 @@ function AvatarDropdown({ user }: AvatarDropdownProps) {
         <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <Link href="/dashboard/settings">Profile</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => signOut()}
+          >
+            Logout
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

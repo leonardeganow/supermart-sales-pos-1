@@ -40,6 +40,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { generateReport } from "@/app/actions";
 
 const data: Payment[] = [
   {
@@ -200,6 +201,26 @@ export default function Page() {
     },
   });
 
+  const paramData = {
+    startDate: new Date("2024-07-11"),
+    endDate: new Date(new Date("2024-07-18").setHours(23, 59, 59, 999)),
+    supermarketId: "668c0590ee39dacdf1f95a82",
+    cashierId: "668da66aac3c324a7eb5dccf",
+  };
+
+  async function generateReportHandler() {
+    try {
+      const response = await generateReport(paramData);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  React.useEffect(() => {
+    generateReportHandler();
+  }, []);
+
   return (
     <div className="w-full">
       <div className="flex-col flex sm:flex-row gap-y-4 justify-between sm:items-center">
@@ -207,39 +228,6 @@ export default function Page() {
           <h1 className="font-semibold">Report</h1>
           <p className="text-sm">Generate reports</p>
         </div>
-
-        {/* <div className="sm:flex-row sm:items-center gap-x-2  gap-y-4">
-          <Dialog open={showModal} onOpenChange={setShowModal}>
-            <Button
-              onClick={() => {
-                setType("");
-                setShowModal(true);
-              }}
-            >
-              Add product
-            </Button>
-
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Product management</DialogTitle>
-                <DialogDescription>
-                  {type === "delete"
-                    ? "Delete product"
-                    : type === "edit"
-                    ? "Edit product"
-                    : "Add new product"}
-                </DialogDescription>
-              </DialogHeader>
-
-              <ProductForm
-                refetch={refetch}
-                userData={userData}
-                type={type}
-                setShowModal={setShowModal}
-              />
-            </DialogContent>
-          </Dialog>
-        </div> */}
       </div>
       <div className="flex items-center py-4">
         <Input

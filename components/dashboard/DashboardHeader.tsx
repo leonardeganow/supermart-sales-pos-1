@@ -1,5 +1,4 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import { LiaHamburgerSolid } from "react-icons/lia";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import MobileMenu from "../header/MobileMenu";

@@ -26,6 +26,7 @@ export default function Page() {
     username: "",
     phone: "",
   });
+
   const [passwords, setPasswords] = useState({
     current: "",
     new: "",
@@ -60,6 +61,11 @@ export default function Page() {
   };
 
   const handlePasswordSave = async () => {
+    if (passwords.current === "" || passwords.new === "") {
+      toast.error("Passwords cannot be empty");
+      return null;
+    }
+
     setIsLoading(true);
     try {
       const response = await changePassword(passwords);
@@ -94,7 +100,7 @@ export default function Page() {
   }, [session]);
 
   return (
-    <Tabs defaultValue="account" className="w-[400px]">
+    <Tabs defaultValue="account" className="sm:w-[500px] mx-auto">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="account">Account</TabsTrigger>
         <TabsTrigger value="password">Password</TabsTrigger>
@@ -113,6 +119,7 @@ export default function Page() {
               <Input
                 id="name"
                 value={accountInfo.name}
+                required
                 onChange={handleAccountChange}
               />
             </div>
@@ -120,17 +127,24 @@ export default function Page() {
               <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
+                required
                 value={accountInfo.username}
                 onChange={handleAccountChange}
               />
             </div>
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
-              <Input disabled id="email" defaultValue={session?.user?.email} />
+              <Input
+                disabled
+                id="email"
+                required
+                defaultValue={session?.user?.email}
+              />
             </div>
             <div className="space-y-1">
               <Label htmlFor="phone">Telephone number</Label>
               <Input
+                required
                 id="phone"
                 value={accountInfo.phone}
                 onChange={handleAccountChange}
@@ -163,8 +177,8 @@ export default function Page() {
               <Label htmlFor="current">Current password</Label>
               <Input
                 id="current"
+                required
                 type="password"
-                value={passwords.current}
                 onChange={handlePasswordChange}
               />
             </div>
@@ -172,8 +186,8 @@ export default function Page() {
               <Label htmlFor="new">New password</Label>
               <Input
                 id="new"
+                required
                 type="password"
-                value={passwords.new}
                 onChange={handlePasswordChange}
               />
             </div>

@@ -13,6 +13,7 @@ import {
 import { BsBoxes } from "react-icons/bs";
 import { PiVan } from "react-icons/pi";
 import Logo from "../header/Logo";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 // Example user roles
 const USER_ROLES = {
@@ -27,79 +28,139 @@ export const navItems = [
     label: "Dashboard",
     path: "/dashboard",
     icon: <AiOutlineDashboard size={20} />,
-    roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER, USER_ROLES.CASHIER], // Both admin and user can see this
+    roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER, USER_ROLES.CASHIER],
   },
   {
     label: "Products",
     path: "/dashboard/products",
     icon: <BsBoxes size={20} />,
-    roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER], // Only admin can see this
+    roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER],
   },
   {
     label: "Pos",
     path: "/dashboard/pos",
     icon: <AiOutlineShoppingCart size={20} />,
-    roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER], // Both admin and user can see this
+    roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER],
   },
   {
     label: "Suppliers",
     path: "/dashboard/suppliers",
     icon: <PiVan size={20} />,
-    roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER], // Only admin can see this
+    roles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER],
   },
   {
     label: "Reports",
     path: "/dashboard/reports",
     icon: <AiOutlineReconciliation size={20} />,
-    roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER], // Only admin can see this
+    subMenu: [
+      {
+        label: "Sales",
+        path: "/dashboard/reports/sales",
+        roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER],
+      },
+      {
+        label: "Products",
+        path: "/dashboard/reports/products",
+        roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER],
+      },
+    ],
+    roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER],
   },
   {
     label: "Users",
     path: "/dashboard/users",
     icon: <AiOutlineTeam size={20} />,
-    roles: [USER_ROLES.ADMIN], // Only admin can see this
+    roles: [USER_ROLES.ADMIN],
   },
   {
     label: "Settings",
     path: "/dashboard/settings",
     icon: <AiOutlineSetting size={20} />,
-    roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER], // Both admin and user can see this
+    roles: [USER_ROLES.ADMIN, USER_ROLES.CASHIER, USER_ROLES.MANAGER],
   },
 ];
 
 interface SidebarProps {
-  user: CurrentUser;
+  user: {
+    role: string;
+  };
 }
 
-function Sidebar(props: SidebarProps) {
+function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [isClosed, setIsClosed] = useState<boolean>(false);
+  const [openSubMenus, setOpenSubMenus] = useState<{ [key: string]: boolean }>(
+    {}
+  );
 
   // Filter navItems based on user role
   const filteredNavItems = navItems.filter((item) =>
-    item.roles.includes(props?.user?.role)
+    item.roles.includes(user?.role)
   );
+
+  const handleSubMenuToggle = (label: string) => {
+    setOpenSubMenus((prev) => ({
+      ...prev,
+      [label]: !prev[label],
+    }));
+  };
 
   const renderNavItems = () => {
     return filteredNavItems.map((item) => (
-      <div
-        onClick={() => router.push(item.path)}
-        key={item.label}
-        className={`hover:bg-red-100 hover:text-red-800 dark:hover:bg-white dark:hover:text-black p-4 mb-2 rounded-lg cursor-pointer transition-all duration-100 ${
-          item.path === pathname
-            ? "border-r-2 border-red-600 dark:border-white bg-red-200 text-red-800"
-            : ""
-        }`}
-      >
+      <div key={item.label}>
         <div
-          className={`flex items-center ${
-            isClosed ? "justify-center" : ""
-          } font-medium gap-x-4`}
+          onClick={() =>
+            item.subMenu
+              ? handleSubMenuToggle(item.label)
+              : router.push(item.path)
+          }
+          className={`hover:bg-red-100 hover:text-red-800 dark:hover:bg-white flex justify-between items-center dark:hover:text-black p-4 mb-2 rounded-lg cursor-pointer transition-all duration-100 ${
+            item.path === pathname
+              ? "border-r-2 border-red-600 dark:border-white bg-red-200 text-red-800"
+              : ""
+          }`}
         >
-          {item.icon}
-          <p className={`${isClosed && "hidden"} duration-200`}>{item.label}</p>
+          <div
+            className={`flex items-center ${
+              isClosed ? "justify-center" : ""
+            } font-medium gap-x-4`}
+          >
+            {item.icon}
+            <p className={`${isClosed && "hidden"} duration-200`}>
+              {item.label}
+            </p>
+          </div>
+
+          {item.subMenu && openSubMenus[item.label] ? (
+            <ChevronUp className="text-gray-500" />
+          ) : item.subMenu && !openSubMenus[item.label] ? (
+            <ChevronDown className="text-gray-500" />
+          ) : null}
         </div>
+        {item.subMenu && (
+          <div
+            className={`pl-8 overflow-hidden transition-all duration-300 ${
+              openSubMenus[item.label] ? "max-h-screen" : "max-h-0"
+            }`}
+          >
+            {item.subMenu.map((subItem) => (
+              <div
+                onClick={() => router.push(subItem.path)}
+                key={subItem.label}
+                className={`hover:bg-red-100 hover:text-red-800 dark:hover:bg-white dark:hover:text-black p-4 mb-2 rounded-lg cursor-pointer transition-all duration-100 ${
+                  subItem.path === pathname
+                    ? "border-r-2 border-red-600 dark:border-white bg-red-200 text-red-800"
+                    : ""
+                }`}
+              >
+                <div className="flex items-center font-medium gap-x-4">
+                  <p>- {subItem.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     ));
   };
