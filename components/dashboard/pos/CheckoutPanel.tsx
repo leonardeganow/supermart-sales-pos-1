@@ -24,7 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import Receipt from "@/components/receipt/Receipt";
+import Receipt from "@/components/header/receipt/Receipt";
 
 interface CheckoutPanelProps {
   cart: any;

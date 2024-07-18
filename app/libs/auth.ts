@@ -15,6 +15,7 @@ interface ManagerSignup {
   email: string;
   name: string;
   username: string;
+  phone: string;
   password: string;
   role: string;
   supermarketId: string;
@@ -50,13 +51,14 @@ const authOptions: NextAuthOptions = {
           throw new Error("Incorrect password.");
         }
 
-        const { _id, email, name, role, supermarketId } = user;
+        const { _id, email, phone, name, role, supermarketId } = user;
 
         return {
           id: _id.toString(),
           email,
           name,
           username,
+          phone,
           role,
           supermarketId: supermarketId.toString(),
         };
@@ -73,6 +75,7 @@ const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.name = user.name;
         token.username = user.username;
+        token.phone = user.phone;
         token.role = user.role;
         token.supermarketId = user.supermarketId;
       } else {
@@ -84,6 +87,7 @@ const authOptions: NextAuthOptions = {
           token.id = dbUser._id.toString();
           token.email = dbUser.email;
           token.name = dbUser.name;
+          token.phone = dbUser.phone;
           token.username = dbUser.username;
           token.role = dbUser.role;
           token.supermarketId = dbUser.supermarketId.toString();
@@ -95,6 +99,7 @@ const authOptions: NextAuthOptions = {
       session.user.id = token.id;
       session.user.name = token.name;
       session.user.username = token.username;
+      session.user.phone = token.phone;
       session.user.role = token.role;
       session.user.supermarketId = token.supermarketId;
       return session;

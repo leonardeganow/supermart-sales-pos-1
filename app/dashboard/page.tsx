@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DatePickerWithRange } from "@/components/dashboard/DateRangePicker";
 import {
   Select,
@@ -11,13 +11,16 @@ import {
 import { DashboardAreaChart } from "@/components/dashboard/DashboardAreaChart";
 import { DashboardPieChart } from "@/components/dashboard/Piechart";
 import { DashboardTable } from "@/components/dashboard/DashboardTable";
-import { fetchDashboardData } from "../actions";
+import { fetchDashboardData, getSupermarketName } from "../actions";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Page() {
   const [selectedPeriod, setSelectedPeriod] = useState("today");
+  const [supermarketName, setSupermarketName] = useState("");
   const [rangePickerDate, setRangePickerDate] = React.useState({
     from: "",
     to: "",
@@ -164,10 +167,34 @@ function Page() {
     });
   };
 
+  const getSupermarketNameHandler = async () => {
+    try {
+      const response: any = await getSupermarketName();
+      if (response.status) {
+        setSupermarketName(response.supermarketName);
+      }
+      if (!response.status) {
+        toast(response.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("internal server error");
+    }
+  };
+
+  useEffect(() => {
+    getSupermarketNameHandler();
+  }, []);
+
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-6 text-primary">
-        Welcome, <span className="text-red-600">Shop n Save</span>{" "}
+      <h1 className="text-2xl font-semibold mb-6 text-primary flex items-center gap-x-1">
+        Welcome,{" "}
+        {supermarketName ? (
+          <span className="text-red-600">{supermarketName}</span>
+        ) : (
+          <Skeleton className="w-20 h-4 " />
+        )}{" "}
       </h1>
       <div className="flex-col flex sm:flex-row gap-y-4 justify-between sm:items-center">
         <div>

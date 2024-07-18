@@ -7,6 +7,9 @@ import { checkAdminRole } from "../middlewares/authMiddleware";
 import OrderModel from "../models/Order";
 import ProductModel from "../models/Products";
 import SupplierModel from "../models/Supplier";
+import SupermartModel from "../models/Supermarket";
+import UserModel from "../models/User";
+import bcrypt from "bcrypt";
 
 export async function fetchDashboardData(startDate: string, endDate: string) {
   try {
@@ -340,5 +343,88 @@ export async function editSupplier(params: any) {
       message: "Internal Server Error",
       error: error.message,
     };
+  }
+}
+
+export async function getSupermarketName() {
+  try {
+    const user = await getCurrentUser();
+
+    await connectToDatabase();
+
+    const supermarket = await SupermartModel.findById(user.supermarketId);
+
+    if (!supermarket) {
+      return { message: "Supermarket not found", status: "false" };
+    }
+
+    return {
+      message: "Supermarket fetched successfully",
+      supermarketName: supermarket.name,
+      status: true,
+    };
+  } catch (error) {
+    console.error("Error fetching supermarket name:", error);
+    return { message: "Internal Server Error", status: "false" };
+  }
+}
+
+export async function editAccountInfo(params: any) {
+  try {
+    const currentUser = await getCurrentUser();
+
+    await connectToDatabase();
+
+    const user = await UserModel.findByIdAndUpdate(currentUser.id, {
+      $set: {
+        name: params.name,
+        phone: params.phone,
+        username: params.username,
+      },
+    });
+
+    console.log(user);
+
+    return {
+      message: "Account info updated successfully",
+      status: true,
+    };
+  } catch (error) {
+    console.error("Error updating account info:", error);
+    return { message: "Internal Server Error", status: false };
+  }
+}
+
+export async function changePassword(params: any) {
+  try {
+    const currentUser = await getCurrentUser();
+    await connectToDatabase();
+
+    const user = await UserModel.findById(currentUser.id);
+
+    if (!user) {
+      return { message: "User not found", status: false };
+    }
+
+    //compare current password with old password
+    const isPasswordCorrect = await bcrypt.compare(
+      params.current,
+      user.password
+    );
+
+    if (!isPasswordCorrect) {
+      return { message: "Current password is incorrect", status: false };
+    }
+
+    //hash the new password
+    const hashedPassword = await bcrypt.hash(params.new, 10);
+    user.password = hashedPassword;
+
+    await user.save();
+
+    return { message: "Password changed successfully", status: true };
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return { message: "Internal Server Error", status: false };
   }
 }
