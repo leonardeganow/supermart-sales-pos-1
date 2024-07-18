@@ -6,7 +6,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Form,
   FormControl,
@@ -22,7 +22,7 @@ import { Loader2 } from "lucide-react";
 import Logo from "@/components/header/Logo";
 import OnboardingRight from "@/components/OnboardingRight";
 import Link from "next/link";
-import { toast } from "sonner";
+import { useTheme } from "next-themes";
 
 const formSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),

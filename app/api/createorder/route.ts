@@ -4,11 +4,9 @@ import OrderModel from "@/app/models/Order";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import ProductModel from "@/app/models/Products";
-import SupermartModel from "@/app/models/Supermarket";
 import UserModel from "@/app/models/User";
 
 export async function POST(request: any) {
-  //this creates a transaction for the database connection
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -16,7 +14,22 @@ export async function POST(request: any) {
     const data = await request.json();
     const user = await getCurrentUser();
 
+    const supermarketId = user.supermarketId;
+
     await connectToDatabase();
+
+    const superMarket = await UserModel.findById(user.id).populate(
+      "supermarketId"
+    );
+
+    if (!superMarket || !superMarket.supermarketId) {
+      await session.abortTransaction();
+      session.endSession();
+      return NextResponse.json({
+        message: "Supermarket not found",
+        status: false,
+      });
+    }
 
     // Check stock and reduce quantity
     for (const item of data.cart) {
@@ -24,7 +37,6 @@ export async function POST(request: any) {
         session
       );
 
-      //if product is not found end session and send cannot be found response
       if (!product) {
         await session.abortTransaction();
         session.endSession();
@@ -34,7 +46,6 @@ export async function POST(request: any) {
         });
       }
 
-      //if quantity is less than the required amount end session and send insufficient stock response
       if (product.quantity < item.quantity) {
         await session.abortTransaction();
         session.endSession();
@@ -44,9 +55,7 @@ export async function POST(request: any) {
         });
       }
 
-      //reduce quantity by the required amount and save product
       product.quantity -= item.quantity;
-      //if product quantity is 0 change instock boolean to false
       if (product.quantity === 0) {
         product.inStock = false;
       }
@@ -56,6 +65,7 @@ export async function POST(request: any) {
     const orderData: any = {
       customerName: data.customerName,
       paymentMethod: data.paymentMethod,
+      supermarketId: supermarketId,
       taxAmount: data.taxAmount,
       totalDiscount: data.totalDiscount,
       finalTotal: data.finalTotal,
@@ -64,7 +74,6 @@ export async function POST(request: any) {
       orderStatus: "success",
     };
 
-    // Only add paymentId if the payment method is not "cash"
     if (data.paymentMethod !== "cash") {
       orderData.paymentId = data.paymentId;
     }
@@ -72,27 +81,18 @@ export async function POST(request: any) {
     const newOrder = new OrderModel(orderData);
     await newOrder.save({ session });
 
-    //commit the transaction and end session
     await session.commitTransaction();
     session.endSession();
 
-    const superMarket = await UserModel.find({
-      _id: user.id,
-    }).populate("supermarketId");
-
-    return NextResponse.json(
-      {
-        message: "Order created successfully",
-        status: true,
-        order: newOrder,
-        supermarketName: superMarket[0].supermarketId.name,
-        supermarketLocation: superMarket[0].supermarketId.location,
-        supermarketNumber: superMarket[0].supermarketId.phone,
-        cashierName: superMarket[0].name,
-      },
-      newOrder
-      // { status: 200 }
-    );
+    return NextResponse.json({
+      message: "Order created successfully",
+      status: true,
+      order: newOrder,
+      supermarketName: superMarket.supermarketId.name,
+      supermarketLocation: superMarket.supermarketId.location,
+      supermarketNumber: superMarket.supermarketId.phone,
+      cashierName: superMarket.name,
+    });
   } catch (error: any) {
     await session.abortTransaction();
     session.endSession();

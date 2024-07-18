@@ -1,9 +1,15 @@
 import mongoose from "mongoose";
+import SupermartModel from "./Supermarket";
 
 const OrderSchema = new mongoose.Schema({
   customerName: { type: String, default: "guest" },
   paymentMethod: { type: String, required: true },
   paymentId: { type: String, required: false },
+  supermarketId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: SupermartModel,
+    required: true,
+  },
   taxAmount: { type: Number, required: true },
   cart: [
     {

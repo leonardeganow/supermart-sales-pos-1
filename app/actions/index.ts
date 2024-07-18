@@ -1,5 +1,5 @@
 "use server";
-
+import mongoose from "mongoose";
 import { getLastSixMonths } from "../helpers";
 import connectToDatabase from "../libs/mongodb";
 import { getCurrentUser } from "../libs/session";
@@ -10,15 +10,18 @@ import SupplierModel from "../models/Supplier";
 
 export async function fetchDashboardData(startDate: string, endDate: string) {
   try {
+    const user = await getCurrentUser();
+
+    const supermarketId = new mongoose.Types.ObjectId(user.supermarketId);
+
     await connectToDatabase();
 
     const start = new Date(startDate);
     const end = new Date(new Date(endDate).setHours(23, 59, 59, 999));
 
-    const month = start.getMonth();
-
-    // Aggregate total stock quantity
+    // Aggregate total stock quantity by supermarket
     const totalStock = await ProductModel.aggregate([
+      { $match: { supermarketId: supermarketId } },
       {
         $group: {
           _id: null,
@@ -27,10 +30,11 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
       },
     ]);
 
-    // Aggregate total revenue within the date range
+    // Aggregate total revenue within the date range by supermarket
     const totalMoneyCollected = await OrderModel.aggregate([
       {
         $match: {
+          supermarketId: supermarketId,
           orderDate: { $gte: start, $lte: end },
         },
       },
@@ -42,11 +46,12 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
       },
     ]);
 
-    // Calculate total cost of goods sold (COGS) within the date range
+    // Calculate total cost of goods sold (COGS) within the date range by supermarket
     const soldProducts = await OrderModel.aggregate([
       { $unwind: "$cart" },
       {
         $match: {
+          supermarketId: supermarketId,
           orderDate: { $gte: start, $lte: end },
         },
       },
@@ -82,12 +87,13 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
     const totalQuantity =
       totalStock.length > 0 ? totalStock[0].totalQuantity : 0;
 
-    // Fetch total orders within the date range
+    // Fetch total orders within the date range by supermarket
     const totalOrders = await OrderModel.countDocuments({
+      supermarketId: supermarketId,
       orderDate: { $gte: start, $lte: end },
     });
 
-    // Calculate sales count for each of the past 6 months
+    // Calculate sales count for each of the past 6 months by supermarket
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
     sixMonthsAgo.setHours(0, 0, 0, 0);
@@ -95,6 +101,7 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
     const monthlySales = await OrderModel.aggregate([
       {
         $match: {
+          supermarketId: supermarketId,
           orderDate: { $gte: sixMonthsAgo },
         },
       },
@@ -135,6 +142,11 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
     });
 
     const paymentMethods = await OrderModel.aggregate([
+      {
+        $match: {
+          supermarketId: supermarketId,
+        },
+      },
       {
         $group: {
           _id: {
@@ -199,7 +211,7 @@ export async function fetchDashboardData(startDate: string, endDate: string) {
       totalOrders: 0,
       totalRevenue: 0,
       totalProfit: 0,
-      chartData: 0,
+      chartData: [],
     };
   }
 }
@@ -216,7 +228,7 @@ export async function createSupplier(param: any) {
       location: param.location,
       telephone: param.telephone,
       product: param.product,
-      createdBy: user.id,
+      supermarketId: user.supermarketId,
     });
     supplier.save();
 
@@ -244,7 +256,9 @@ export async function getSuppliers() {
     await connectToDatabase();
 
     // Fetch suppliers created by the admin
-    const suppliers = await SupplierModel.find({ createdBy: currentUser.id });
+    const suppliers = await SupplierModel.find({
+      supermarketId: currentUser.supermarketId,
+    });
 
     return {
       message: "Users fetched successfully",

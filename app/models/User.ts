@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import SupermartModel from "./Supermarket";
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -14,8 +15,8 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ["cashier", "manager", "admin"], required: true },
   supermarketId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Supermarket",
-    required: false,
+    ref: SupermartModel,
+    required: true,
   },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

@@ -16,8 +16,12 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith(path)
   );
 
-  if (!isAuthenticated && request.nextUrl.pathname !== "/login") {
-    // Redirect unauthenticated users to the login page, but avoid redirecting from login page itself
+  if (
+    !isAuthenticated &&
+    request.nextUrl.pathname !== "/login" &&
+    request.nextUrl.pathname !== "/"
+  ) {
+    // Redirect unauthenticated users to the login page
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -27,6 +31,9 @@ export async function middleware(request: NextRequest) {
       new URL("/dashboard/unauthorized", request.url)
     );
   }
+
+  // Allow the request to proceed
+  return NextResponse.next();
 }
 
 export const config = {

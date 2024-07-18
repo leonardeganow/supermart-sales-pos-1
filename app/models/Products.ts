@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import SupermartModel from "./Supermarket";
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -39,10 +40,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  createdBy: {
+  supermarketId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: false,
+    ref: SupermartModel,
+    required: true,
   },
 });
 

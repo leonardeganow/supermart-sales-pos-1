@@ -6,7 +6,7 @@ function Receipt(props: any) {
       ref={props.componentRef}
       className="grid min-h-[30dvh] place-items-center w-full  "
     >
-      <div className="mt-4 p-4  rounded-lg shadow-lg w-[400px]">
+      <div className="mt-4 p-4  shadow-lg w-[400px]">
         <h2 className="text-xl font-bold text-center">
           {props?.receiptData?.supermarketName}
         </h2>

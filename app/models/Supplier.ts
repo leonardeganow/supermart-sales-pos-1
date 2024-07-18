@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
+import SupermartModel from "./Supermarket";
 
 const supplierSchema = new mongoose.Schema({
   name: { type: String, required: true },
   location: { type: String, required: true },
   telephone: { type: String, required: true },
   product: { type: String, required: true },
-  createdBy: {
+  supermarketId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: false,
+    ref: SupermartModel,
+    required: true,
   },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

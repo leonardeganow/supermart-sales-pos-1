@@ -19,7 +19,9 @@ export async function GET() {
     await connectToDatabase();
 
     // Fetch users created by the admin
-    const products = await ProductModel.find({ createdBy: currentUser.id });
+    const products = await ProductModel.find({
+      supermarketId: currentUser.supermarketId,
+    });
 
     return NextResponse.json(
       {

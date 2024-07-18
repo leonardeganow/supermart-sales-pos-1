@@ -7,6 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useTheme } from "next-themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const queryClient = new QueryClient();
+
   return (
     <html lang="en">
       {/* <Head>
