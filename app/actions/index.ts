@@ -430,45 +430,135 @@ export async function changePassword(params: any) {
 export async function generateReport(params: any) {
   try {
     const currentUser = await getCurrentUser();
-    if (currentUser) {
-      const middlewareResponse = await checkAdminRole({
-        body: currentUser,
-      });
-      if (middlewareResponse) return middlewareResponse;
+    if (!currentUser) {
+      return { message: "Unauthorized", status: 401 };
     }
+
+    const middlewareResponse = await checkAdminRole({ body: currentUser });
+    if (middlewareResponse) return middlewareResponse;
 
     await connectToDatabase();
 
     const supermarketId = new mongoose.Types.ObjectId(
       currentUser.supermarketId
     );
-    const cashierId = new mongoose.Types.ObjectId(params.cashierId);
+    const startDate = new Date(params.startDate);
+    const endDate = new Date(
+      new Date(params.endDate).setHours(23, 59, 59, 999)
+    );
 
-    //query sales made by cashier  ove a period of time
-    const sales = await OrderModel.aggregate([
+    const orders = await OrderModel.aggregate([
       {
         $match: {
           supermarketId: supermarketId,
-          // cashierId: cashierId,
           orderDate: {
-            $gte: params.startDate,
-            $lte: params.endDate,
+            $gte: startDate,
+            $lte: endDate,
           },
         },
       },
       {
-        $group: {
-          _id: null,
-          totalSales: {
-            $sum: "$finalTotal",
+        $lookup: {
+          from: "users",
+          localField: "cashierId",
+          foreignField: "_id",
+          as: "cashier",
+        },
+      },
+      {
+        $unwind: "$cashier",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "cart.productId",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      {
+        $addFields: {
+          cart: {
+            $map: {
+              input: "$cart",
+              as: "item",
+              in: {
+                productId: "$$item.productId",
+                productName: {
+                  $let: {
+                    vars: {
+                      product: {
+                        $arrayElemAt: [
+                          {
+                            $filter: {
+                              input: "$productDetails",
+                              as: "product",
+                              cond: {
+                                $eq: ["$$product._id", "$$item.productId"],
+                              },
+                            },
+                          },
+                          0,
+                        ],
+                      },
+                    },
+                    in: "$$product.name",
+                  },
+                },
+                quantity: "$$item.quantity",
+              },
+            },
           },
         },
       },
+      {
+        $project: {
+          _id: 1,
+          orderDate: 1,
+          cashierId: 1,
+          cashierName: "$cashier.name",
+          cart: 1,
+          paymentMethod: 1,
+          taxAmount: 1,
+          totalDiscount: 1,
+          finalTotal: 1,
+        },
+      },
+      {
+        $sort: { orderDate: -1 }, // Sort by orderDate in descending order
+      },
     ]);
 
-    console.log(sales);
+    // Convert orders to plain objects and format any non-plain fields
+    const formattedOrders = orders.map((order) => ({
+      _id: order._id.toString(),
+      orderDate: order.orderDate.toISOString(),
+      cashierId: order.cashierId.toString(),
+      cashierName: order.cashierName,
+      cart: order.cart.map((item: any) => ({
+        productId: item.productId.toString(),
+        productName: item.productName,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice ?? null,
+        finalPrice: item.finalPrice ?? null,
+        taxApplied: item.taxApplied ?? null,
+        discountApplied: item.discountApplied ?? null,
+        taxAmount: item.taxAmount ?? null,
+        discountAmount: item.discountAmount ?? null,
+      })),
+      paymentMethod: order.paymentMethod,
+      taxAmount: order.taxAmount,
+      totalDiscount: order.totalDiscount,
+      finalTotal: order.finalTotal,
+    }));
+
+    return {
+      message: "Report generated successfully",
+      orders: formattedOrders,
+      status: 200,
+    };
   } catch (error) {
     console.error("Error generating report:", error);
-    return { message: "Internal Server Error" };
+    return { message: "Internal Server Error", status: 500 };
   }
 }
