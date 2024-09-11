@@ -207,7 +207,7 @@ function Page() {
     }
   };
 
-  const { isFetching, isError, error, data, refetch } = useQuery({
+  const { isFetching, isError, error, data } = useQuery({
     queryKey: ["sales", rangePickerDate, type],
     queryFn: getSales,
     staleTime: 5000,
