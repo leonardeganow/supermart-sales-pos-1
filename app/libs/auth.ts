@@ -6,7 +6,7 @@ import connectToDatabase from "@/app/libs/mongodb";
 import UserModel from "@/app/models/User";
 
 interface Login {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -26,7 +26,7 @@ const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
+        email: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -34,12 +34,12 @@ const authOptions: NextAuthOptions = {
           throw new Error("Credentials are required");
         }
 
-        const { username, password } = credentials as Login;
+        const { email, password } = credentials as Login;
 
         await connectToDatabase();
 
         const user: ManagerSignup | null = await UserModel.findOne({
-          username,
+          email,
         }).lean();
         if (!user) {
           throw new Error("No user found with the provided username.");
@@ -51,7 +51,7 @@ const authOptions: NextAuthOptions = {
           throw new Error("Incorrect password.");
         }
 
-        const { _id, email, phone, name, role, supermarketId } = user;
+        const { _id, username, phone, name, role, supermarketId } = user;
 
         return {
           id: _id.toString(),

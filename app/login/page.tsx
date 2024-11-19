@@ -22,15 +22,14 @@ import { Loader2 } from "lucide-react";
 import Logo from "@/components/header/Logo";
 import OnboardingRight from "@/components/OnboardingRight";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 
 const formSchema = z.object({
-  username: z.string().min(1, { message: "Username is required" }),
+  email: z.string().min(1, { message: "email is required" }),
   password: z.string().min(1, { message: "Password is required" }),
 });
 
 const defaultValues: z.infer<typeof formSchema> = {
-  username: "",
+  email: "",
   password: "",
 };
 
@@ -54,10 +53,10 @@ function Page() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setMessage("");
-      const { username, password } = values;
+      const { email, password } = values;
       const response: any = await signIn("credentials", {
         redirect: false,
-        username,
+        email,
         password,
       });
 
@@ -96,12 +95,12 @@ function Page() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter username" {...field} />
+                    <Input placeholder="Enter email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -120,6 +119,12 @@ function Page() {
                 </FormItem>
               )}
             />
+            <Link
+              href="/forgot-password"
+              className="text-sm flex justify-center text-blue-500 underline"
+            >
+              forgot your password?
+            </Link>
             <div className="flex justify-center">
               <Button disabled={form.formState.isSubmitting} type="submit">
                 {form.formState.isSubmitting ? (
