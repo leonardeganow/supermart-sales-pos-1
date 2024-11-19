@@ -34,7 +34,7 @@ export default function MyForm() {
       if (response.data.status) {
         form.reset();
         form.setValue("email", "");
-        toast.success("Reset link has been sent to your email.");
+        toast.success("A reset link has been sent to your email.");
       }
     } catch (error: any) {
       console.error("Form submission error", error);
