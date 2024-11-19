@@ -13,13 +13,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 function CompanySignupStep(props: CompanySignupStepProps) {
-  const { toast } = useToast();
-
   const formSchema = z.object({
     name: z.string().min(1, { message: "company name is required" }),
     email: z.string().email().min(1, { message: "email is required" }),
@@ -51,16 +49,12 @@ function CompanySignupStep(props: CompanySignupStepProps) {
       const newResponse = await response.json();
 
       if (newResponse.status) {
-        toast({
-          description: newResponse.message,
-        });
+        toast.success(newResponse.message);
         props.setCompanyId(newResponse.id);
         props.handleNext(1);
       }
 
-      toast({
-        description: newResponse.message,
-      });
+      // toast(newResponse.message);
     } catch (error) {
       console.log(error);
     }
@@ -122,7 +116,7 @@ function CompanySignupStep(props: CompanySignupStepProps) {
               </FormItem>
             )}
           />
-          <div  className="flex justify-center">
+          <div className="flex justify-center">
             <Button
               className="flex justify-center items-center"
               disabled={form.formState.isSubmitting}

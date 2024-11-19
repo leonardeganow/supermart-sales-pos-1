@@ -38,7 +38,7 @@ export default function MyForm() {
       }
     } catch (error: any) {
       console.error("Form submission error", error);
-      toast.error(error);
+      toast.error(error.response.data.message);
     }
   }
 

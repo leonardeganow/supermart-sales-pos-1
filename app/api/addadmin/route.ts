@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { checkAdminRole } from "@/app/middlewares/authMiddleware";
 import { getCurrentUser } from "@/app/libs/session";
+import { PASSWORD_REGEX } from "@/app/constants";
 
 export async function POST(request: Request) {
   try {
@@ -36,6 +37,17 @@ export async function POST(request: Request) {
         message: "Username already exists",
         status: false,
       });
+    }
+
+    if (!PASSWORD_REGEX.test(data.password)) {
+      return NextResponse.json(
+        {
+          message:
+            "Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.",
+          status: false,
+        },
+        { status: 400 }
+      );
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10); // Hash the password

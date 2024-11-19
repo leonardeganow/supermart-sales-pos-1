@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
   if (
     !isAuthenticated &&
     request.nextUrl.pathname !== "/login" &&
-    request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/forgot-password"
+    request.nextUrl.pathname !== "/" && request.nextUrl.pathname !== "/forgot-password" && request.nextUrl.pathname !== "/resetpassword"
 
   ) {
     // Redirect unauthenticated users to the login page

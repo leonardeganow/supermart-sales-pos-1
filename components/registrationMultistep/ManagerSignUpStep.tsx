@@ -14,13 +14,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import { PASSWORD_REGEX } from "@/app/constants";
+import { toast } from "sonner";
 
 function ManagerSignUpStep(props: ManagerSignUpStepProps) {
   //router
   const router = useRouter();
-  const { toast } = useToast();
 
   const formSchema = z
     .object({
@@ -28,7 +28,10 @@ function ManagerSignUpStep(props: ManagerSignUpStepProps) {
       email: z.string().email().min(1, { message: "email is required" }),
       phone: z.string().min(10).max(15),
       username: z.string(),
-      password: z.string().min(8),
+      password: z.string().min(8).regex(PASSWORD_REGEX, {
+        message:
+          "Password must include uppercase, lowercase, number, and special character",
+      }),
       confirmPassword: z.string(),
     })
     .refine(
@@ -70,17 +73,14 @@ function ManagerSignUpStep(props: ManagerSignUpStepProps) {
         body: JSON.stringify(data),
       });
       const newResponse = await response.json();
+      console.log(newResponse);
 
       if (newResponse.status) {
-        toast({
-          description: newResponse.message,
-        });
+        toast(newResponse.message);
         router.push("/login");
+      } else {
+        toast(newResponse.message);
       }
-
-      toast({
-        description: newResponse.message,
-      });
     } catch (error) {
       console.log(error);
     }
